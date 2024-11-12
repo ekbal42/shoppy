@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Calendar } from "lucide-react";
+import { Link } from "@remix-run/react";
+import { Calendar, User } from "lucide-react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,7 +17,8 @@ export default function Index() {
           <h1 className="text-2xl text-white uppercase mb-4 lg:mb-0">
             Jobify Jobs
           </h1>
-          <div className="flex mx-4 lg:mx-0 flex-col lg:flex-row gap-4">
+
+          <div className="flex mx-4 lg:mx-0 flex-col items-center lg:flex-row gap-4">
             <select className="px-3 py-2 rounded appearance-none w-full">
               <option value="">Select Filter</option>
               <option value="all">All</option>
@@ -38,6 +40,13 @@ export default function Index() {
                 Search
               </button>
             </form>
+            <div>
+              <Link to="/auth/signin">
+                <button>
+                  <User className="text-white" />
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -75,7 +84,7 @@ const JobCard = () => {
           HSC Tutor Needed
         </h2>
         <div className="bg-blue-100 px-2 py-1 text-nowrap text-sm text-blue-600 rounded">
-          <Calendar className="inline" size={16} /> 23 Jun 2024
+          <Calendar className="inline -mt-1" size={16} /> 23 Jun 2024
         </div>
       </div>
       <div className="grid grid-cols-2 lg:grid-cols-2 gap-4">
