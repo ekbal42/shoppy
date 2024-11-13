@@ -1,5 +1,5 @@
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
@@ -54,18 +54,14 @@ export let action = async ({ request }: { request: Request }) => {
 
 export default function Signin() {
   const actionData = useActionData<{ error?: string }>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded">
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Sign In to your account 🔑</h1>
-          <Form
-            method="post"
-            className="flex flex-col gap-4"
-            onSubmit={() => setIsSubmitting(true)}
-          >
+          <Form method="post" className="flex flex-col gap-4">
             {actionData?.error && (
               <div className="text-red-500 text-sm bg-red-100 p-3">
                 {actionData.error}
@@ -87,9 +83,9 @@ export default function Signin() {
             />
             <button
               className="bg-blue-500 text-white py-2 rounded"
-              disabled={isSubmitting}
+              disabled={navigation?.state === "submitting"}
             >
-              {isSubmitting ? "Signing In..." : "Sign In"}
+              {navigation?.state === "submitting" ? "Signing In..." : "Sign In"}
             </button>
           </Form>
           <Link to="/auth/signup">

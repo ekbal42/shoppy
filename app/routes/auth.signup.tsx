@@ -1,5 +1,5 @@
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import { useState } from "react";
 
@@ -47,6 +47,7 @@ export let action = async ({ request }: { request: Request }) => {
 export default function Signup() {
   const actionData = useActionData<{ error?: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -90,9 +91,9 @@ export default function Signup() {
             />
             <button
               className="bg-blue-500 text-white py-2 rounded"
-              disabled={isSubmitting}
+              disabled={navigation?.state === "submitting"}
             >
-              {isSubmitting ? "Signing Up..." : "Sign Up"}
+              {navigation?.state === "submitting" ? "Signing Up..." : "Sign Up"}
             </button>
           </Form>
 
