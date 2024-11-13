@@ -1,6 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import { prisma } from "../db.server";
+import { useState } from "react";
 
 export let action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
@@ -24,7 +25,7 @@ export let action = async ({ request }: { request: Request }) => {
   }
 
   try {
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         name,
         email,
@@ -45,6 +46,7 @@ export let action = async ({ request }: { request: Request }) => {
 
 export default function Signup() {
   const actionData = useActionData<{ error?: string }>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -53,10 +55,14 @@ export default function Signup() {
           <h1 className="capitalize text-lg">Create a new account 🔑</h1>
 
           {/* Form for user signup */}
-          <Form method="post" className="flex flex-col gap-4">
+          <Form
+            method="post"
+            className="flex flex-col gap-4"
+            onSubmit={() => setIsSubmitting(true)}
+          >
             {/* Show error message if exists */}
             {actionData?.error && (
-              <div className="text-red-500 text-sm mb-2">
+              <div className="text-red-500 text-sm bg-red-100 p-3">
                 {actionData.error}
               </div>
             )}
@@ -82,8 +88,11 @@ export default function Signup() {
               className="py-2 px-3 border"
               required
             />
-            <button className="bg-blue-500 text-white py-2 rounded">
-              Sign Up
+            <button
+              className="bg-blue-500 text-white py-2 rounded"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Signing Up..." : "Sign Up"}
             </button>
           </Form>
 

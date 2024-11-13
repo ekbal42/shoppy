@@ -1,6 +1,12 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData } from "@remix-run/react";
 import { prisma } from "../db.server";
+import jwt from "jsonwebtoken";
+import { serialize } from "cookie";
+import { useState } from "react";
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_EXPIRATION = "1h";
 
 export let action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
@@ -10,6 +16,7 @@ export let action = async ({ request }: { request: Request }) => {
   if (!email || !password) {
     return json({ error: "Email and password are required." }, { status: 400 });
   }
+
   const user = await prisma.user.findUnique({
     where: { email },
   });
@@ -21,27 +28,49 @@ export let action = async ({ request }: { request: Request }) => {
   if (user.password !== password) {
     return json({ error: "Incorrect password." }, { status: 400 });
   }
-  return redirect("/tutor/dashboard");
+
+  const token = jwt.sign(
+    { name: user.name, userId: user.id, email: user.email, role: user.role },
+    JWT_SECRET,
+    {
+      expiresIn: JWT_EXPIRATION,
+    }
+  );
+
+  const cookie = serialize("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 3600,
+    path: "/",
+    sameSite: "strict",
+  });
+
+  return redirect(`/${user.role}/dashboard`, {
+    headers: {
+      "Set-Cookie": cookie,
+    },
+  });
 };
 
 export default function Signin() {
   const actionData = useActionData<{ error?: string }>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded">
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Sign In to your account 🔑</h1>
-
-          {/* Form for user login */}
-          <Form method="post" className="flex flex-col gap-4">
-            {/* Display error message if exists */}
+          <Form
+            method="post"
+            className="flex flex-col gap-4"
+            onSubmit={() => setIsSubmitting(true)}
+          >
             {actionData?.error && (
-              <div className="text-red-500 text-sm mb-2">
+              <div className="text-red-500 text-sm bg-red-100 p-3">
                 {actionData.error}
               </div>
             )}
-
             <input
               type="email"
               name="email"
@@ -56,12 +85,13 @@ export default function Signin() {
               className="py-2 px-3 border"
               required
             />
-            <button className="bg-blue-500 text-white py-2 rounded">
-              Sign In
+            <button
+              className="bg-blue-500 text-white py-2 rounded"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Signing In..." : "Sign In"}
             </button>
           </Form>
-
-          {/* Link to the signup page */}
           <Link to="/auth/signup">
             <p className="text-sm text-center hover:text-blue-500 hover:underline">
               Don't have an account? Create Account!
