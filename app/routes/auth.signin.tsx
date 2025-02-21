@@ -3,12 +3,11 @@ import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
-import { useState } from "react";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const JWT_EXPIRATION = "1h";
 
-export let action = async ({ request }: { request: Request }) => {
+export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
   const email = formData.get("email");
   const password = formData.get("password");
@@ -82,15 +81,15 @@ export default function Signin() {
               required
             />
             <button
-              className="bg-blue-500 text-white py-2 rounded"
+              className="bg-green-500 text-white py-2 rounded"
               disabled={navigation?.state === "submitting"}
             >
               {navigation?.state === "submitting" ? "Signing In..." : "Sign In"}
             </button>
           </Form>
           <Link to="/auth/signup">
-            <p className="text-sm text-center hover:text-blue-500 hover:underline">
-              Don't have an account? Create Account!
+            <p className="text-sm text-center hover:text-green-500 hover:underline">
+              Dont have an account? Create Account!
             </p>
           </Link>
         </div>

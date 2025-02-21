@@ -12,7 +12,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div className="min-w-80">
-      <nav className="bg-blue-500 py-4">
+      <nav className="bg-gray-500 py-4">
         <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between">
           <h1 className="text-2xl text-white uppercase mb-4 lg:mb-0">
             Jobify Jobs
@@ -35,7 +35,7 @@ export default function Index() {
               />
               <button
                 type="button"
-                className="text-white font-normal uppercase bg-blue-600 px-3 py-2 rounded"
+                className="text-white font-normal uppercase bg-gray-600 px-3 py-2 rounded"
               >
                 Search
               </button>
@@ -51,7 +51,7 @@ export default function Index() {
         </div>
       </nav>
       <div className="max-w-5xl mx-auto py-4 px-4 xl:px-0">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <JobCard />
           <JobCard />
           <JobCard />
@@ -73,17 +73,17 @@ export default function Index() {
 const JobCard = () => {
   return (
     <div
-      className="bg-white rounded-lg shadow-sm border p-4 mb-4 cursor-pointer
-     hover:shadow hover:border-blue-500 transition-all duration-300"
+      className="bg-white rounded-lg shadow border p-4 mb-4 cursor-pointer
+     hover:shadow hover:border-gray-500 transition-all duration-300"
     >
       <div className="flex flex-wrap gap-4 justify-between items-center border-b pb-4 mb-4">
         <h2 className="text-lg font-semibold line-clamp-1">
-          <span className="bg-blue-500 text-white px-2 py-1 rounded me-2">
+          <span className="bg-gray-500 text-white px-2 py-1 rounded me-2">
             ID2846
           </span>
           HSC Tutor Needed
         </h2>
-        <div className="bg-blue-100 px-2 py-1 text-nowrap text-sm text-blue-600 rounded">
+        <div className="bg-gray-100 px-2 py-1 text-nowrap text-sm text-gray-600 rounded">
           <Calendar className="inline -mt-1" size={16} /> 23 Jun 2024
         </div>
       </div>

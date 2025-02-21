@@ -1,9 +1,8 @@
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
-import { useState } from "react";
 
-export let action = async ({ request }: { request: Request }) => {
+export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
   const name = formData.get("name");
   const email = formData.get("email");
@@ -46,7 +45,6 @@ export let action = async ({ request }: { request: Request }) => {
 
 export default function Signup() {
   const actionData = useActionData<{ error?: string }>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigation = useNavigation();
 
   return (
@@ -56,11 +54,7 @@ export default function Signup() {
           <h1 className="capitalize text-lg">Create a new account 🔑</h1>
 
           {/* Form for user signup */}
-          <Form
-            method="post"
-            className="flex flex-col gap-4"
-            onSubmit={() => setIsSubmitting(true)}
-          >
+          <Form method="post" className="flex flex-col gap-4">
             {/* Show error message if exists */}
             {actionData?.error && (
               <div className="text-red-500 text-sm bg-red-100 p-3">
@@ -90,7 +84,7 @@ export default function Signup() {
               required
             />
             <button
-              className="bg-blue-500 text-white py-2 rounded"
+              className="bg-green-500 text-white py-2 rounded"
               disabled={navigation?.state === "submitting"}
             >
               {navigation?.state === "submitting" ? "Signing Up..." : "Sign Up"}
@@ -98,7 +92,7 @@ export default function Signup() {
           </Form>
 
           <Link to="/auth/signin">
-            <p className="text-sm text-center hover:text-blue-500 hover:underline">
+            <p className="text-sm text-center hover:text-green-500 hover:underline">
               Already have an account? Sign In!
             </p>
           </Link>

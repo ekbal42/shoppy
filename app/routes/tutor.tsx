@@ -1,17 +1,12 @@
-import { useState } from "react";
-import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
-import { getUserFromSession } from "~/session.server";
-import { Menu, Power } from "lucide-react";
+import { Outlet } from "@remix-run/react";
+import { Power } from "lucide-react";
 import { withAuthTutor } from "~/utils/withAuthTutor";
 
-export let loader = withAuthTutor(async ({ request }: { request: Request }) => {
-  const user = getUserFromSession(request);
-  return { user };
+export const loader = withAuthTutor(async () => {
+  return {};
 });
 
 export default function Tutor() {
-  const user = useLoaderData<any>().user;
-  const { pathname } = useLocation();
   return (
     <>
       {/* navbar */}
@@ -19,12 +14,12 @@ export default function Tutor() {
         <div className="max-w-6xl mx-auto bg-gray-200 p-4 flex items-center gap-4">
           <div className="w-full items-center flex justify-between gap-4">
             <div>
-              <h1 className="text-lg text-nowrap font-semibold uppercase">
-                {user?.name}
+              <h1 className="text-lg text-green-500 text-nowrap font-extrabold uppercase">
+                Jobify
               </h1>
             </div>
             <ul className="flex gap-2 items-center capitalize">
-              <li>
+              {/* <li>
                 <Link
                   to="/superadmin/users"
                   className={`px-3 py-2 rounded border border-gray-300 ${
@@ -33,27 +28,7 @@ export default function Tutor() {
                 >
                   Users
                 </Link>
-              </li>
-              <li>
-                <Link
-                  to="/superadmin/other"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("other") && "bg-gray-300"
-                  }`}
-                >
-                  Requests
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/superadmin/other"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("other") && "bg-gray-300"
-                  }`}
-                >
-                  Settings
-                </Link>
-              </li>
+              </li> */}
               <li>
                 <form method="post" action="/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">

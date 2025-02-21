@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -15,4 +15,33 @@ model User {
   password  String
   name      String
   role      String
+  profile   Profile?
+}
+
+
+model Profile {
+  id                   Int      @id @default(autoincrement())
+  bio                  String?
+  avatarUrl            String?
+  userId               Int      @unique
+  user                 User     @relation(fields: [userId], references: [id])
+
+  livingLocation       String?
+  preferredLocations   String? 
+  gender               String?
+
+  sscSchool           String?
+  sscGroup            String?
+  sscResult           Float?
+  sscMedium           String?
+
+  hscCollege          String?
+  hscGroup            String?
+  hscResult           Float?
+  hscMedium           String?
+
+  currentUniversity   String?
+  currentDepartment   String?
+  currentYearInUniversity Int?
+  lastSemesterResult  Float?
 }
