@@ -1,5 +1,3 @@
-// app/routes/dashboard.tsx
-
 import { json, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { ActionFunction } from "@vercel/remix";

@@ -1,10 +1,9 @@
-import { useState } from "react";
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
-import { Menu, Power } from "lucide-react";
+import {  Power } from "lucide-react";
 import { withAuthSuperAdmin } from "~/utils/withAuthSuperAdmin";
 
-export let loader = withAuthSuperAdmin(
+export const loader = withAuthSuperAdmin(
   async ({ request }: { request: Request }) => {
     const user = getUserFromSession(request);
     return { user };

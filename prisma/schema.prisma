@@ -16,6 +16,8 @@ model User {
   name      String
   role      String
   profile   Profile?
+  applications JobApplication[]
+  jobsPosted   Job[]
 }
 
 
@@ -44,4 +46,38 @@ model Profile {
   currentDepartment   String?
   currentYearInUniversity Int?
   lastSemesterResult  Float?
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  location    String
+  salary      Float?
+  publisher     String
+  subjects String?
+  tutoringTime String?
+  daysInWeek String?
+  studentGender String
+  tutorGenderNeed String
+  tutorUniversityNeed String
+  tutorUniversityTypeNeed String
+  tutorDepartmentNeed String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  postedById  Int
+  postedBy    User     @relation(fields: [postedById], references: [id])
+  applications JobApplication[]
+}
+
+model JobApplication {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  jobId     Int
+  appliedAt DateTime @default(now())
+
+  user      User @relation(fields: [userId], references: [id])
+  job       Job  @relation(fields: [jobId], references: [id])
+
+  @@unique([userId, jobId])
 }
