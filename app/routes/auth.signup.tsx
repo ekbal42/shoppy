@@ -1,6 +1,15 @@
-import { json, redirect } from "@remix-run/node";
+import { json, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
+import { getUserFromSession } from "~/session.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = getUserFromSession(request);
+  if (user) {
+    return redirect(`/${user?.role}/dashboard`);
+  }
+  return {};
+};
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());

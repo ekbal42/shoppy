@@ -16,7 +16,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     where: { userId },
   });
 
-  return json({ profile, user });
+  const alljobs = await prisma.job.findMany();
+
+  return json({ profile, user, alljobs });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -69,11 +71,11 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect("/tutor/dashboard");
 };
 export default function Dashboard() {
-  const { profile, user } = useLoaderData<typeof loader>();
+  const { profile, user, alljobs } = useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 mb-4 lg:mb-0 lg:gap-4">
         <div className="col-span-1 space-y-4">
           <div className="flex flex-col gap-4 border rounded-md justify-center items-center bg-gray-100 py-12">
             <img
@@ -95,13 +97,13 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="bg-gray-100 border p-4 rounded-md flex justify-between items-center">
-            <Link to="#">
+            <Link to="/">
               <p className="hover:text-green-500 hover:underline text-lg">
                 All Jobs
               </p>
             </Link>
-            <p className="bg-green-500  text-white px-2 py-1 rounded-full">
-              10
+            <p className="bg-green-500  text-white px-3 py-1 rounded-full">
+              {alljobs?.length}
             </p>
           </div>
           <div className="bg-gray-100 border p-4 rounded-md flex justify-between items-center">
@@ -110,9 +112,7 @@ export default function Dashboard() {
                 Jobs Applied
               </p>
             </Link>
-            <p className="bg-green-500  text-white px-2 py-1 rounded-full">
-              05
-            </p>
+            <p className="bg-green-500  text-white px-3 py-1 rounded-full">5</p>
           </div>
         </div>
         <div className="col-span-2">

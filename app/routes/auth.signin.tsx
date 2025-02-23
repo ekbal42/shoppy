@@ -1,12 +1,20 @@
-import { json, redirect } from "@remix-run/node";
+import { json, LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import jwt from "jsonwebtoken";
 import { serialize } from "cookie";
+import { getUserFromSession } from "~/session.server";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const JWT_EXPIRATION = "1h";
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = getUserFromSession(request);
+  if (user) {
+    return redirect(`/${user?.role}/dashboard`);
+  }
+  return {};
+};
 export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
   const email = formData.get("email");

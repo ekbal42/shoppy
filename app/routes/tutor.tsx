@@ -1,4 +1,4 @@
-import { Outlet } from "@remix-run/react";
+import { Link, Outlet } from "@remix-run/react";
 import { Power } from "lucide-react";
 import { withAuthTutor } from "~/utils/withAuthTutor";
 
@@ -14,9 +14,12 @@ export default function Tutor() {
         <div className="max-w-6xl mx-auto bg-gray-200 p-4 flex items-center gap-4">
           <div className="w-full items-center flex justify-between gap-4">
             <div>
-              <h1 className="text-lg text-green-500 text-nowrap font-extrabold uppercase">
+              <Link
+                to="/"
+                className="text-lg text-green-500 text-nowrap font-extrabold uppercase"
+              >
                 Jobify
-              </h1>
+              </Link>
             </div>
             <ul className="flex gap-2 items-center capitalize">
               {/* <li>

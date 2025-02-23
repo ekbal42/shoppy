@@ -1,8 +1,9 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, Link, useSearchParams, Form } from "@remix-run/react";
-import { Calendar, User } from "lucide-react";
+import { Calendar, Inbox, User } from "lucide-react";
 import { prisma } from "~/db.server";
+import { formatTimeToAMPM, getRelativeTime } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -45,19 +46,23 @@ export default function Index() {
   return (
     <div className="min-w-80">
       <nav className="bg-green-500 py-4">
-        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between">
-          <h1 className="text-2xl text-white uppercase mb-4 lg:mb-0">
-            Jobify Jobs
-          </h1>
-
-          <div className="flex items-center gap-4">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between">
+          <div className="flex items-center gap-3 mb-4 lg:mb-0">
+            <h1 className="text-2xl text-white font-extrabold uppercase">
+              Jobify
+            </h1>
+            <div className="bg-white px-3 rounded-md text-green-500">
+              {jobs?.length}
+            </div>
+          </div>
+          <div className="flex items-center justify-center lg:gap-4">
             <Form
               method="get"
               className="flex mx-4 lg:mx-0 flex-col items-center lg:flex-row gap-4"
             >
               <select
                 name="filter"
-                className="px-3 py-2 rounded appearance-none w-full"
+                className="px-3 py-1 rounded appearance-none w-full"
                 defaultValue={filter}
                 onChange={(e) => {
                   const newParams = new URLSearchParams(searchParams);
@@ -74,7 +79,7 @@ export default function Index() {
             </Form>
             <div>
               <Link to="/auth/signin">
-                <button>
+                <button className="border-2 rounded-full size-8 flex items-center justify-center">
                   <User className="text-white" />
                 </button>
               </Link>
@@ -83,9 +88,15 @@ export default function Index() {
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto py-4 px-4 xl:px-0">
+      <div className="max-w-6xl mx-auto py-4 px-4 xl:px-0">
         {jobs.length === 0 ? (
-          <p className="text-center text-green-600 my-20">No jobs found.</p>
+          <>
+            <div className="flex justify-center flex-col items-center gap-3 mt-40 lg:mt-72">
+              <p className="text-center flex  text-green-600">
+                <Inbox className="me-2" /> No jobs found.
+              </p>
+            </div>
+          </>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {jobs.map((job: any) => (
@@ -100,9 +111,10 @@ export default function Index() {
 
 const JobCard = ({ job }: { job: any }) => {
   return (
-    <div
+    <Link
       className="bg-white rounded-lg shadow border p-4 cursor-pointer
      hover:shadow hover:border-green-500 transition-all duration-300"
+      to={`/job/details/${job?.id}`}
     >
       <div className="flex flex-wrap gap-4 justify-between items-center border-b pb-4 mb-4">
         <h2 className="text-lg font-semibold line-clamp-1 capitalize">
@@ -112,8 +124,8 @@ const JobCard = ({ job }: { job: any }) => {
           <span className="capitalize"> {job.title}</span>
         </h2>
         <div className="bg-green-100 px-2 py-1 text-nowrap text-sm border text-green-600 rounded">
-          <Calendar className="inline -mt-1" size={16} />{" "}
-          {new Date(job.createdAt).toLocaleDateString()}
+          <Calendar className="inline -mt-1 me-2" size={16} />
+          {job.createdAt ? getRelativeTime(job.createdAt) : "N/A"}
         </div>
       </div>
       <div className="flex gap-2 border-b pb-4 mb-4 font-medium">
@@ -139,9 +151,11 @@ const JobCard = ({ job }: { job: any }) => {
         </div>
         <div>
           <p className="text-gray-900 font-medium">Tutoring Time</p>
-          <p className="text-green-500"> {job.tutoringTime || "N/A"}</p>
+          <p className="text-green-500">
+            {formatTimeToAMPM(job.tutoringTime) || "N/A"}
+          </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
