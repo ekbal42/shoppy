@@ -3,7 +3,6 @@ import { Form, Link, useLoaderData } from "@remix-run/react";
 import { ActionFunction } from "@vercel/remix";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
-
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
@@ -87,7 +86,7 @@ export default function Dashboard() {
             <img
               src="/user.jpg"
               alt="profile-img"
-              className="size-40 border rounded-full"
+              className="size-40 border-4 rounded-full"
             />
             <div>
               <p className="text-2xl font-bold text-center">{user?.name}</p>
@@ -95,10 +94,10 @@ export default function Dashboard() {
                 {user?.email}
               </p>
               <p
-                className="text-sm text-center bg-green-500 text-white rounded-md 
-                py-1 mt-2 uppercase"
+                className="text-sm px-3 text-center bg-green-500 text-white
+                py-1 mt-2 uppercase rounded border border-green-700"
               >
-                User ID : {user?.userId}
+                {user?.role} User ID : {user?.userId}
               </p>
             </div>
           </div>

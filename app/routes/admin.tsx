@@ -1,4 +1,4 @@
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
 import { Power } from "lucide-react";
 import { withAuthAdmin } from "~/utils/withAuthAdmin";
@@ -25,16 +25,14 @@ export default function SuperAdmin() {
               </h1>
             </div>
             <ul className="flex gap-2 items-center capitalize">
-              {/* <li>
+              <li>
                 <Link
-                  to="#"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("users") && "bg-gray-300"
-                  }`}
+                  to="/job/add"
+                  className={`px-3 py-2 rounded border border-gray-300`}
                 >
-                  Users
+                  Add Job
                 </Link>
-              </li> */}
+              </li>
               <li>
                 <form method="post" action="/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">

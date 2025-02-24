@@ -66,6 +66,9 @@ export default function Signin() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded">
+        <h1 className="text-start text-green-500 mb-4 text-2xl font-extrabold">
+          Jobify Sign In~
+        </h1>
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Sign In to your account 🔑</h1>
           <Form method="post" className="flex flex-col gap-4">

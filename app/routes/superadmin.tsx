@@ -20,9 +20,12 @@ export default function SuperAdmin() {
         <div className="max-w-6xl mx-auto bg-gray-200 p-4 flex items-center gap-4">
           <div className="w-full items-center flex justify-between gap-4">
             <div>
-              <h1 className="text-lg text-nowrap font-semibold uppercase">
+              <Link
+                to="/superadmin/dashboard"
+                className="text-lg text-nowrap font-semibold uppercase"
+              >
                 {user?.name}
-              </h1>
+              </Link>
             </div>
             <ul className="flex gap-2 items-center capitalize">
               <li>
@@ -33,6 +36,14 @@ export default function SuperAdmin() {
                   }`}
                 >
                   Users
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/job/add"
+                  className={`px-3 py-2 rounded border border-gray-300`}
+                >
+                  Add Job
                 </Link>
               </li>
               <li>

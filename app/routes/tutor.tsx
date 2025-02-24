@@ -22,16 +22,6 @@ export default function Tutor() {
               </Link>
             </div>
             <ul className="flex gap-2 items-center capitalize">
-              {/* <li>
-                <Link
-                  to="/superadmin/users"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("users") && "bg-gray-300"
-                  }`}
-                >
-                  Users
-                </Link>
-              </li> */}
               <li>
                 <form method="post" action="/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">

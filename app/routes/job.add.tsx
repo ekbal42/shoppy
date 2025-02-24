@@ -1,9 +1,6 @@
-import {
-  ActionFunction,
-  json,
-  LoaderFunction,
-  redirect,
-} from "@remix-run/node";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
+import { redirect } from "react-router-dom";
+
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
@@ -12,6 +9,10 @@ import { withAuth } from "~/utils/withAuth";
 export const loader: LoaderFunction = withAuth(
   async ({ request }: { request: Request }) => {
     const user = getUserFromSession(request);
+    if (user?.role !== "admin" && user?.role !== "superadmin") {
+      const response = redirect(`/${user?.role}/dashboard`);
+      throw response;
+    }
     return json({ user });
   }
 );
@@ -73,7 +74,7 @@ export default function AddJob() {
   const { user } = useLoaderData<typeof loader>();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pb-4">
+    <div className="max-w-6xl mx-auto py-4 pb-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
         <div className="col-span-1">
           <div className="flex flex-col gap-4 border rounded-md justify-center items-center bg-gray-100 py-12">
@@ -83,7 +84,7 @@ export default function AddJob() {
             <img
               src="/user.jpg"
               alt="profile-img"
-              className="size-40 border rounded-full"
+              className="size-40 border-4 rounded-full"
             />
             <div>
               <p className="text-2xl font-bold text-center">{user?.name}</p>
@@ -91,10 +92,10 @@ export default function AddJob() {
                 {user?.email}
               </p>
               <p
-                className="text-sm text-center bg-green-500 text-white rounded-md 
-                  py-1 mt-2 uppercase"
+                className="text-sm px-3 text-center bg-green-500 text-white
+                py-1 mt-2 uppercase rounded border border-green-700"
               >
-                User ID : {user?.userId}
+                {user?.role} User ID : {user?.userId}
               </p>
             </div>
           </div>
@@ -116,7 +117,6 @@ export default function AddJob() {
                 required
               />
             </div>
-
             <div>
               <p className="block font-medium">Description:</p>
               <textarea
@@ -141,7 +141,7 @@ export default function AddJob() {
               <input
                 type="text"
                 name="subjects"
-                placeholder="Enter subjects(Comma separeted)"
+                placeholder="Enter subjects(Comma separeted~)"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 required
               />
@@ -170,6 +170,7 @@ export default function AddJob() {
             <div>
               <p className="block font-medium">Salary:</p>
               <input
+                required
                 type="number"
                 step="500"
                 placeholder="Job salary"
@@ -189,13 +190,14 @@ export default function AddJob() {
                 defaultValue={user?.name}
               />
             </div>
-
             <div>
               <p className="block font-medium">Student Gender:</p>
               <select
+                required
                 name="studentGender"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="mt-1 block appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               >
+                <option value="">~select here~</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
               </select>
@@ -204,9 +206,11 @@ export default function AddJob() {
             <div>
               <p className="block font-medium">Tutor Gender Needed:</p>
               <select
+                required
                 name="tutorGenderNeed"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="mt-1 block appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               >
+                <option value="">~select here~</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Any">Any</option>
@@ -214,28 +218,33 @@ export default function AddJob() {
             </div>
 
             <div>
-              <p className="block font-medium">Tutor University Needed:</p>
+              <p className="block font-medium">Tutor University:</p>
               <input
+                required
                 type="text"
                 name="tutorUniversityNeed"
                 placeholder="Tutor university"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
-
             <div>
-              <p className="block font-medium">Tutor University Type Needed:</p>
-              <input
-                type="text"
+              <p className="block font-medium">Tutor University Type:</p>
+              <select
+                required
                 name="tutorUniversityTypeNeed"
-                placeholder="Tutor University type"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              />
+                className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              >
+                <option value="">~select here~</option>
+                <option value="Public University">Public University</option>
+                <option value="Private University">Private University</option>
+                <option value="Seven College">Seven College</option>
+              </select>
             </div>
 
             <div>
-              <p className="block font-medium">Tutor Department Needed:</p>
+              <p className="block font-medium">Tutor Department:</p>
               <input
+                required
                 type="text"
                 name="tutorDepartmentNeed"
                 placeholder="Tutor department"
