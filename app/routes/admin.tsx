@@ -1,9 +1,9 @@
-import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
 import { Power } from "lucide-react";
-import { withAuthSuperAdmin } from "~/utils/withAuthSuperAdmin";
+import { withAuthAdmin } from "~/utils/withAuthAdmin";
 
-export const loader = withAuthSuperAdmin(
+export const loader = withAuthAdmin(
   async ({ request }: { request: Request }) => {
     const user = getUserFromSession(request);
     return { user };
@@ -12,7 +12,7 @@ export const loader = withAuthSuperAdmin(
 
 export default function SuperAdmin() {
   const user = useLoaderData<any>().user;
-  const { pathname } = useLocation();
+  //   const { pathname } = useLocation();
   return (
     <>
       {/* navbar */}
@@ -25,16 +25,16 @@ export default function SuperAdmin() {
               </h1>
             </div>
             <ul className="flex gap-2 items-center capitalize">
-              <li>
+              {/* <li>
                 <Link
-                  to="/superadmin/users"
+                  to="#"
                   className={`px-3 py-2 rounded border border-gray-300 ${
                     pathname.includes("users") && "bg-gray-300"
                   }`}
                 >
                   Users
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <form method="post" action="/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">

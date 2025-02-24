@@ -15,10 +15,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   const profile = await prisma.profile.findUnique({
     where: { userId },
   });
-
+  const appliedJobs = await prisma.jobApplication.findMany({
+    where: { userId },
+    include: {
+      job: true,
+    },
+  });
   const alljobs = await prisma.job.findMany();
 
-  return json({ profile, user, alljobs });
+  return json({ profile, user, alljobs, appliedJobs });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -71,7 +76,8 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect("/tutor/dashboard");
 };
 export default function Dashboard() {
-  const { profile, user, alljobs } = useLoaderData<typeof loader>();
+  const { profile, user, alljobs, appliedJobs } =
+    useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen">
@@ -107,12 +113,14 @@ export default function Dashboard() {
             </p>
           </div>
           <div className="bg-gray-100 border p-4 rounded-md flex justify-between items-center">
-            <Link to="#">
+            <Link to="/tutor/appliedjobs">
               <p className="hover:text-green-500 hover:underline text-lg">
                 Jobs Applied
               </p>
             </Link>
-            <p className="bg-green-500  text-white px-3 py-1 rounded-full">5</p>
+            <p className="bg-green-500  text-white px-3 py-1 rounded-full">
+              {appliedJobs.length}
+            </p>
           </div>
         </div>
         <div className="col-span-2">

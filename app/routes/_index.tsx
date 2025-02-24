@@ -15,6 +15,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
   const search = url.searchParams.get("search") || "";
   const filter = url.searchParams.get("filter") || "all";
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const perPage = 10;
 
   const whereClause: any = {};
   if (filter === "today") {
@@ -31,21 +33,26 @@ export const loader: LoaderFunction = async ({ request }) => {
     whereClause.studentGender = "Female";
   }
 
+  const totalJobs = await prisma.job.count({ where: whereClause });
   const jobs = await prisma.job.findMany({
     where: whereClause,
     orderBy: { createdAt: "desc" },
+    skip: (page - 1) * perPage,
+    take: perPage,
   });
 
-  return json({ jobs, search, filter });
+  return json({ jobs, search, filter, page, perPage, totalJobs });
 };
 
 export default function Index() {
-  const { jobs, filter } = useLoaderData<typeof loader>();
+  const { jobs, filter, page, perPage, totalJobs } =
+    useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
+  const totalPages = Math.ceil(totalJobs / perPage);
 
   return (
     <div className="min-w-80">
-      <nav className="bg-green-500 py-4">
+      <nav className="bg-green-500 py-4 shadow sticky top-0">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between">
           <div className="flex items-center gap-3 mb-4 lg:mb-0">
             <h1 className="text-2xl text-white font-extrabold uppercase">
@@ -98,11 +105,22 @@ export default function Index() {
             </div>
           </>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {jobs.map((job: any) => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {jobs.map((job: any) => (
+                <JobCard key={job.id} job={job} />
+              ))}
+            </div>
+            {totalJobs?.length > 10 && (
+              <div className="flex justify-center mt-8">
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  searchParams={searchParams}
+                />
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
@@ -157,5 +175,53 @@ const JobCard = ({ job }: { job: any }) => {
         </div>
       </div>
     </Link>
+  );
+};
+
+const Pagination = ({
+  page,
+  totalPages,
+  searchParams,
+}: {
+  page: number;
+  totalPages: number;
+  searchParams: URLSearchParams;
+}) => {
+  const getPageUrl = (pageNumber: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pageNumber.toString());
+    return `?${params.toString()}`;
+  };
+
+  return (
+    <div className="flex gap-2">
+      {page > 1 && (
+        <Link
+          to={getPageUrl(page - 1)}
+          className="px-4 py-2 bg-green-500 text-white rounded"
+        >
+          Previous
+        </Link>
+      )}
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+        <Link
+          key={p}
+          to={getPageUrl(p)}
+          className={`px-4 py-2 ${
+            p === page ? "bg-green-700" : "bg-green-500"
+          } text-white rounded`}
+        >
+          {p}
+        </Link>
+      ))}
+      {page < totalPages && (
+        <Link
+          to={getPageUrl(page + 1)}
+          className="px-4 py-2 bg-green-500 text-white rounded"
+        >
+          Next
+        </Link>
+      )}
+    </div>
   );
 };
