@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const perPage = 10;
 
-  const whereClause: any = {};
+  const whereClause: any = { status: "active" };
   if (filter === "today") {
     whereClause.createdAt = {
       gte: new Date(new Date().setHours(0, 0, 0, 0)),

@@ -1,7 +1,7 @@
 import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
 import { Power } from "lucide-react";
-import { withAuthSuperAdmin } from "~/utils/withAuthSuperAdmin";
+import { withAuthSuperAdmin } from "~/middlewares/withAuthSuperAdmin";
 
 export const loader = withAuthSuperAdmin(
   async ({ request }: { request: Request }) => {
@@ -47,7 +47,7 @@ export default function SuperAdmin() {
                 </Link>
               </li>
               <li>
-                <form method="post" action="/logout">
+                <form method="post" action="/auth/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">
                     <Power className="h-5 hover:text-red-500" />
                   </button>

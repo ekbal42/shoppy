@@ -1,7 +1,7 @@
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
 import { Power } from "lucide-react";
-import { withAuthAdmin } from "~/utils/withAuthAdmin";
+import { withAuthAdmin } from "~/middlewares/withAuthAdmin";
 
 export const loader = withAuthAdmin(
   async ({ request }: { request: Request }) => {
@@ -20,9 +20,12 @@ export default function SuperAdmin() {
         <div className="max-w-6xl mx-auto bg-gray-200 p-4 flex items-center gap-4">
           <div className="w-full items-center flex justify-between gap-4">
             <div>
-              <h1 className="text-lg text-nowrap font-semibold uppercase">
+              <Link
+                to="/admin/dashboard"
+                className="text-lg text-nowrap font-semibold uppercase"
+              >
                 {user?.name}
-              </h1>
+              </Link>
             </div>
             <ul className="flex gap-2 items-center capitalize">
               <li>
@@ -34,7 +37,15 @@ export default function SuperAdmin() {
                 </Link>
               </li>
               <li>
-                <form method="post" action="/logout">
+                <Link
+                  to="/admin/manage"
+                  className={`px-3 py-2 rounded border border-gray-300`}
+                >
+                  Management
+                </Link>
+              </li>
+              <li>
+                <form method="post" action="/auth/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">
                     <Power className="h-5 hover:text-red-500" />
                   </button>

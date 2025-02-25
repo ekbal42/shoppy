@@ -3,12 +3,13 @@ import { redirect } from "react-router-dom";
 
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { prisma } from "~/db.server";
-import { getUserFromSession } from "~/session.server";
-import { withAuth } from "~/utils/withAuth";
+import { getUserById, getUserFromSession } from "~/session.server";
+import { withAuth } from "~/middlewares/withAuth";
 
 export const loader: LoaderFunction = withAuth(
   async ({ request }: { request: Request }) => {
-    const user = getUserFromSession(request);
+    const userSession = getUserFromSession(request);
+    const user = await getUserById(Number(userSession?.userId));
     if (user?.role !== "admin" && user?.role !== "superadmin") {
       const response = redirect(`/${user?.role}/dashboard`);
       throw response;

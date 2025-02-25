@@ -10,7 +10,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   if (!userId) {
     return redirect("/login");
   }
-
   const profile = await prisma.profile.findUnique({
     where: { userId },
   });
@@ -21,7 +20,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
   });
   const alljobs = await prisma.job.findMany();
-
   return json({ profile, user, alljobs, appliedJobs });
 };
 

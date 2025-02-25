@@ -1,6 +1,6 @@
 import { Link, Outlet } from "@remix-run/react";
 import { Power } from "lucide-react";
-import { withAuthTutor } from "~/utils/withAuthTutor";
+import { withAuthTutor } from "~/middlewares/withAuthTutor";
 
 export const loader = withAuthTutor(async () => {
   return {};
@@ -23,7 +23,7 @@ export default function Tutor() {
             </div>
             <ul className="flex gap-2 items-center capitalize">
               <li>
-                <form method="post" action="/logout">
+                <form method="post" action="/auth/logout">
                   <button className="px-3 py-2 rounded border border-gray-300 me-4">
                     <Power className="h-5 hover:text-red-500" />
                   </button>
