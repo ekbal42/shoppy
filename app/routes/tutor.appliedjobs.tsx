@@ -2,6 +2,8 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
+import { getRelativeTime } from "~/utils";
+import { Eye } from "lucide-react";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
@@ -40,13 +42,12 @@ export default function AppliedJobs() {
     useLoaderData<typeof loader>();
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">
-        Applied Jobs
-        <span className="bg-green-500 ms-2 text-white px-3 py-2 text-sm rounded-full">
+      <div className="flex justify-between items-center p-4 border rounded-md bg-gray-100 mb-4">
+        <h1 className="text-2xl font-semibold">Applications</h1>
+        <p className="bg-green-500 inline-flex ms-2 text-xs text-white px-2 py-1 rounded-full">
           {totalAppliedJobs}
-        </span>
-      </h1>
-
+        </p>
+      </div>
       {/* Display applied jobs */}
       <div className="space-y-4">
         {appliedJobs.length === 0 ? (
@@ -55,27 +56,32 @@ export default function AppliedJobs() {
           appliedJobs.map((application: any) => (
             <div
               key={application.id}
-              className="p-4 border rounded-lg shadow-sm flex justify-between items-center"
+              className="p-4 border rounded-lg shadow-sm  gap-4 flex flex-wrap justify-between items-center"
             >
-              <div>
-                <h2 className="text-xl font-semibold capitalize">
-                  {application.job.title}
-                </h2>
-                <p className="text-gray-600">{application.job.description}</p>
-                <p className="text-sm text-gray-500">
-                  Applied on :
-                  <span className="ms-1">
-                    {new Date(application.appliedAt).toLocaleDateString()}
-                  </span>
-                </p>
+              <div className="flex justify-start items-center gap-4">
+                <div>
+                  <p className="text-5xl">{application.id}</p>
+                </div>
+                <div>
+                  <h2 className="text-xl font-medium uppercase line-clamp-1">
+                    {application.job.title}
+                  </h2>
+                  <p className="text-gray-600">{application.job.description}</p>
+                  <p className="text-sm text-gray-500 text-nowrap">
+                    <span className="me-1">
+                      {new Date(application.appliedAt).toLocaleDateString()}
+                    </span>
+                    - {getRelativeTime(application.appliedAt)}
+                  </p>
+                </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="bg-blue-200 text-blue-500 px-3 py-1 rounded-full">
+                <div className="bg-blue-100 text-nowrap text-blue-500 text-sm border border-blue-500 px-3 py-1 rounded-full">
                   Just Applied
                 </div>
                 <Link to={`/job/details/${application.job?.id}`}>
-                  <button className="bg-green-500 px-3 py-2 rounded-md text-white">
-                    View Details
+                  <button className="bg-gray-200 px-2 py-2 rounded-full text-black">
+                    <Eye />
                   </button>
                 </Link>
               </div>

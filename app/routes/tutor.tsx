@@ -1,4 +1,4 @@
-import { Link, Outlet } from "@remix-run/react";
+import { Link, Outlet, useLocation } from "@remix-run/react";
 import { Power } from "lucide-react";
 import { withAuthTutor } from "~/middlewares/withAuthTutor";
 
@@ -7,6 +7,8 @@ export const loader = withAuthTutor(async () => {
 });
 
 export default function Tutor() {
+  const { pathname } = useLocation();
+
   return (
     <>
       {/* navbar */}
@@ -16,15 +18,25 @@ export default function Tutor() {
             <div>
               <Link
                 to="/"
-                className="text-lg text-green-500 text-nowrap font-extrabold uppercase"
+                className="text-2xl text-green-500 text-nowrap font-extrabold uppercase"
               >
                 Jobify
               </Link>
             </div>
             <ul className="flex gap-2 items-center capitalize">
               <li>
+                <Link
+                  to="/tutor/dashboard"
+                  className={`px-3 py-2 rounded border border-gray-300 ${
+                    pathname.includes("dashboard") && "bg-gray-300"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
                 <form method="post" action="/auth/logout">
-                  <button className="px-3 py-2 rounded border border-gray-300 me-4">
+                  <button className="px-3 py-2 rounded border border-gray-300">
                     <Power className="h-5 hover:text-red-500" />
                   </button>
                 </form>
