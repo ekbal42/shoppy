@@ -54,11 +54,11 @@ export default function Index() {
     <div className="min-w-80">
       <nav className="bg-green-500 py-4 shadow sticky top-0">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between">
-          <div className="flex items-center gap-3 mb-4 lg:mb-0">
+          <div className="flex items-center gap-2 mb-4 lg:mb-0 ">
             <h1 className="text-2xl text-white font-extrabold uppercase">
               Jobify
             </h1>
-            <div className="bg-white px-3 rounded-md text-green-500">
+            <div className="bg-white px-2 mt-0.5 text-sm rounded-full text-green-500">
               {jobs?.length}
             </div>
           </div>
@@ -69,7 +69,9 @@ export default function Index() {
             >
               <select
                 name="filter"
-                className="px-3 py-1 rounded appearance-none w-full"
+                className="mt-1 block appearance-none w-full px-3 py-1 border
+                  border-gray-300 rounded-2xl focus:outline-none focus:ring-green-500
+                  focus:border-green-500"
                 defaultValue={filter}
                 onChange={(e) => {
                   const newParams = new URLSearchParams(searchParams);

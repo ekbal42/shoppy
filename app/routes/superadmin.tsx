@@ -31,24 +31,22 @@ export default function SuperAdmin() {
               <li>
                 <Link
                   to="/superadmin/users"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("users") && "bg-gray-300"
+                  className={`px-3 py-2 rounded text-nowrap ${
+                    pathname.includes("users") &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
                   }`}
                 >
                   Users
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/job/add"
-                  className={`px-3 py-2 rounded border border-gray-300`}
-                >
+                <Link to="/job/add" className={`px-3 py-2 rounded text-nowrap`}>
                   Add Job
                 </Link>
               </li>
-              <li>
+              <li className="pe-4 md:pe-0">
                 <form method="post" action="/auth/logout">
-                  <button className="px-3 py-2 rounded border border-gray-300 me-4">
+                  <button className="px-3 py-2 rounded border border-gray-300">
                     <Power className="h-5 hover:text-red-500" />
                   </button>
                 </form>

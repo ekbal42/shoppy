@@ -26,15 +26,38 @@ export default function Tutor() {
             <ul className="flex gap-2 items-center capitalize">
               <li>
                 <Link
+                  to="/"
+                  className={`px-3 py-2 rounded text-nowrap ${
+                    pathname === "/" &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
+                  }`}
+                >
+                  Job Board
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/tutor/appliedjobs"
+                  className={`px-3 py-2 rounded text-nowrap ${
+                    pathname.includes("/tutor/appliedjobs") &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
+                  }`}
+                >
+                  Applications
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/tutor/dashboard"
-                  className={`px-3 py-2 rounded border border-gray-300 ${
-                    pathname.includes("dashboard") && "bg-gray-300"
+                  className={`px-3 py-2 rounded ${
+                    pathname.includes("dashboard") &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
                   }`}
                 >
                   Dashboard
                 </Link>
               </li>
-              <li>
+              <li className="pe-4 md:pe-0">
                 <form method="post" action="/auth/logout">
                   <button className="px-3 py-2 rounded border border-gray-300">
                     <Power className="h-5 hover:text-red-500" />

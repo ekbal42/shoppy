@@ -29,26 +29,40 @@ export default function SuperAdmin() {
             </div>
             <ul className="flex gap-2 items-center capitalize">
               <li>
-                <Link
-                  to="/job/add"
-                  className={`px-3 py-2 rounded border border-gray-300 text-nowrap`}
-                >
+                <Link to="/" className={`px-3 py-2 rounded text-nowrap`}>
+                  Job Board
+                </Link>
+              </li>
+              <li>
+                <Link to="/job/add" className={`px-3 py-2 rounded text-nowrap`}>
                   Add Job
                 </Link>
               </li>
               <li>
                 <Link
+                  to="/admin/dashboard"
+                  className={`px-3 py-2 rounded text-nowrap ${
+                    pathname.includes("/admin/dashboard") &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
+                  }`}
+                >
+                  All Jobs
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/admin/manage"
-                  className={`px-3 py-2 rounded border border-gray-300 text-nowrap ${
-                    pathname.includes("manage") && "bg-gray-300"
+                  className={`px-3 py-2 rounded text-nowrap ${
+                    pathname.includes("manage") &&
+                    "underline underline-offset-3 decoration-2 decoration-green-500"
                   }`}
                 >
                   My Management
                 </Link>
               </li>
-              <li>
+              <li className="pe-4 md:pe-0">
                 <form method="post" action="/auth/logout">
-                  <button className="px-3 py-2 rounded border border-gray-300 me-4">
+                  <button className="px-3 py-2 rounded border border-gray-300">
                     <Power className="h-5 hover:text-red-500" />
                   </button>
                 </form>

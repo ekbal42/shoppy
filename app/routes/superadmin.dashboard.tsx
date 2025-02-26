@@ -64,7 +64,7 @@ export default function Dashboard() {
   } = useLoaderData<typeof loader>();
 
   return (
-    <div className="pt-3 lg:pt-4">
+    <div className="pt-1 lg:pt-4">
       {/* Job Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {/* Total Jobs */}

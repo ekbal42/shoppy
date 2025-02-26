@@ -43,8 +43,8 @@ export default function AppliedJobs() {
   return (
     <div>
       <div className="flex justify-between items-center p-4 border rounded-md bg-gray-100 mb-4">
-        <h1 className="text-2xl font-medium">Applications</h1>
-        <p className="bg-green-500 inline-flex ms-2 text-xs text-white px-2 py-1 rounded-full">
+        <h1 className="text-xl font-normal">Applications</h1>
+        <p className="bg-green-500 inline-flex ms-2 text-sm text-white px-2 py-1 rounded-full">
           {totalAppliedJobs}
         </p>
       </div>

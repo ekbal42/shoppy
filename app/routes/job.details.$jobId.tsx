@@ -23,10 +23,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   if (isNaN(jobId)) {
     throw new Response("Invalid Job ID", { status: 400 });
   }
-
   const user = getUserFromSession(request);
   const userId = user ? Number(user.userId) : null;
-
+  await prisma.job.update({
+    where: { id: jobId },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+  });
   const job = await prisma.job.findUnique({
     where: { id: jobId },
     include: {
@@ -50,7 +56,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw new Response("Job not found", { status: 404 });
   }
   const hasApplied = userId ? job.applications.length > 0 : false;
-  return json({ job, hasApplied, user });
+  const allApplications = await prisma.jobApplication.findMany({
+    where: { jobId },
+  });
+  return json({ job, hasApplied, user, allApplications });
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -83,7 +92,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function JobDetailsPage() {
-  const { job, hasApplied } = useLoaderData<typeof loader>();
+  const { job, hasApplied, allApplications } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<any>();
 
   const handleApply = () => {
@@ -96,19 +105,19 @@ export default function JobDetailsPage() {
   return (
     <div className="px-4 lg:ps-4 xl:p-0 pb-8">
       {fetcher.state === "idle" && fetcher.data?.success && (
-        <div className="mt-4 p-4 bg-green-100 text-green-700 rounded-lg">
+        <div className="mt-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-500">
           Successfully applied for the job!
         </div>
       )}
       {fetcher.state === "idle" && fetcher.data?.error && (
-        <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-lg">
+        <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-500">
           {fetcher.data.error}
         </div>
       )}
-      <div className="grid grid-cols-2 lg:grid-cols-3 lg:gap-4 xl:gap-8 mt-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-0 lg:gap-4 xl:gap-8 mt-4">
         <div className="col-span-2">
           <div className="flex flex-wrap gap-4 justify-between items-center">
-            <h1 className="text-4xl font-semibold capitalize underline text-gray-900">
+            <h1 className="text-xl md:text-4xl font-semibold capitalize underline text-gray-900">
               {job.title}
             </h1>
             <div className="flex justify-between items-center gap-4">
@@ -251,11 +260,21 @@ export default function JobDetailsPage() {
             </div>
             <div className="flex justify-between items-center">
               <p className="text-gray-700 font-semibold">Applications</p>
-              <p className="text-gray-500">10</p>
+              <p className="text-gray-500">
+                {hasApplied
+                  ? allApplications.length === 1
+                    ? "You applied"
+                    : `You and ${allApplications.length - 1} other${
+                        allApplications.length > 2 ? "s" : ""
+                      } applied`
+                  : allApplications.length === 0
+                  ? "No applications yet"
+                  : `${allApplications.length} applied`}{" "}
+              </p>
             </div>
             <div className="flex justify-between items-center">
               <p className="text-gray-700 font-semibold">Views</p>
-              <p className="text-gray-500">23K</p>
+              <p className="text-gray-500">{job.views}</p>
             </div>
           </div>
           {/* Apply and Share Buttons */}

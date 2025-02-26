@@ -65,6 +65,7 @@ model Job {
   tutorUniversityNeed String
   tutorUniversityTypeNeed String
   tutorDepartmentNeed String
+  views Int   @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   status      String   @default("active")
