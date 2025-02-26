@@ -22,7 +22,7 @@ export default function SuperAdmin() {
             <div>
               <Link
                 to="/superadmin/dashboard"
-                className="text-lg text-nowrap font-semibold uppercase"
+                className="text-2xl text-nowrap font-extrabold uppercase"
               >
                 {user?.name}
               </Link>

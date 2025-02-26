@@ -114,7 +114,6 @@ export default function Manage() {
     searchParams.set("page", "1");
     setSearchParams(searchParams);
   };
-
   return (
     <div className="max-w-full">
       {messageVisible && fetcherData?.message && (
@@ -158,9 +157,9 @@ export default function Manage() {
               <tr key={job.id} className="border-b hover:bg-gray-50">
                 <td className="px-4 py-2">{job.id}</td>
                 <td className="px-4 py-2 text-nowrap">
-                  {new Date(job.createdAt).toLocaleDateString()}
+                  {new Date(job.managedAt).toLocaleDateString()}
                   {(() => {
-                    const d = new Date(job.createdAt),
+                    const d = new Date(job.managedAt),
                       t = new Date();
                     const y = new Date(t);
                     y.setDate(t.getDate() - 1);

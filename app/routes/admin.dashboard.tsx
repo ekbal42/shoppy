@@ -10,6 +10,7 @@ import {
 import { useState, useEffect } from "react";
 import { Eye } from "lucide-react";
 import { getUserFromSession } from "~/session.server";
+import { getRelativeTime } from "~/utils";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);
@@ -59,20 +60,30 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (manageId && userId) {
     try {
-      await prisma.user.update({
-        where: { id: parseInt(userId) },
-        data: {
-          managedJobs: {
-            connect: { id: parseInt(manageId) },
+      await prisma.$transaction([
+        prisma.job.update({
+          where: { id: parseInt(manageId) },
+          data: {
+            managedById: parseInt(userId),
+            managedAt: new Date(),
           },
-        },
-      });
+        }),
+        prisma.user.update({
+          where: { id: parseInt(userId) },
+          data: {
+            managedJobs: {
+              connect: { id: parseInt(manageId) },
+            },
+          },
+        }),
+      ]);
 
       return json({
         message: "Job successfully added to managed jobs.",
         success: true,
       });
     } catch (error) {
+      console.error("Error managing job:", error);
       return json({ message: "Error managing job.", success: false });
     }
   }
@@ -161,30 +172,14 @@ export default function Jobs() {
           <tbody>
             {jobs.map((job: any) => (
               <tr key={job.id} className="border-b hover:bg-gray-50">
-                <td>
+                <td className="py-3">
                   <p className="ms-3">{job.id}</p>
                 </td>
                 <td className="px-4 py-2 text-nowrap capitalize">
                   {new Date(job.createdAt).toLocaleDateString()}
-                  {(() => {
-                    const d = new Date(job.createdAt),
-                      t = new Date();
-                    const y = new Date(t);
-                    y.setDate(t.getDate() - 1);
-                    return d.toDateString() === t.toDateString() ? (
-                      <span className="ml-2 bg-green-500 text-white text-sm px-2 py-1 rounded-full">
-                        Today
-                      </span>
-                    ) : d.toDateString() === y.toDateString() ? (
-                      <span className="ml-2 bg-yellow-500 text-white text-sm px-2 py-1 rounded-full">
-                        Yesterday
-                      </span>
-                    ) : (
-                      <span className="ml-2 bg-gray-500 text-white text-sm px-2 py-1 rounded-full">
-                        Older
-                      </span>
-                    );
-                  })()}
+                  <span className="bg-blue-100 text-sm border border-blue-500 ms-2 py-1 px-2 text-blue-500 rounded-full">
+                    {getRelativeTime(job.createdAt)}
+                  </span>
                 </td>
                 <td className="px-4 py-2 text-nowrap capitalize">
                   {job.title.split(" ").slice(0, 3).join(" ") +
@@ -205,14 +200,14 @@ export default function Jobs() {
                 <td>
                   <button
                     onClick={() => handleManageJob(job.id)}
-                    className={`ms-4 text-white text-nowrap rounded-md ${
+                    className={`ms-4 text-nowrap rounded-md ${
                       job?.managedBy
                         ? "text-black cursor-not-allowed"
-                        : "bg-green-500 hover:bg-green-600 px-3"
+                        : "bg-green-500 hover:bg-green-600 px-3 text-white"
                     }`}
                     disabled={job?.managedBy}
                   >
-                    {job?.managedBy ? `${job?.managedBy?.name}` : "Manage"}
+                    {job?.managedBy ? job?.managedBy?.name : "Manage"}
                   </button>
                 </td>
 

@@ -73,6 +73,7 @@ model Job {
   applications JobApplication[]
   managedById Int?
   managedBy   User?    @relation("ManagedJobs", fields: [managedById], references: [id])
+  managedAt   DateTime?
 }
 
 model JobApplication {

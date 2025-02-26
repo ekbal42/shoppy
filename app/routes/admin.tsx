@@ -1,4 +1,4 @@
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import { getUserFromSession } from "~/session.server";
 import { Power } from "lucide-react";
 import { withAuthAdmin } from "~/middlewares/withAuthAdmin";
@@ -12,7 +12,7 @@ export const loader = withAuthAdmin(
 
 export default function SuperAdmin() {
   const user = useLoaderData<any>().user;
-  //   const { pathname } = useLocation();
+  const { pathname } = useLocation();
   return (
     <>
       {/* navbar */}
@@ -22,7 +22,7 @@ export default function SuperAdmin() {
             <div>
               <Link
                 to="/admin/dashboard"
-                className="text-lg text-nowrap font-semibold uppercase"
+                className="text-2xl text-nowrap font-extrabold uppercase"
               >
                 {user?.name}
               </Link>
@@ -31,7 +31,7 @@ export default function SuperAdmin() {
               <li>
                 <Link
                   to="/job/add"
-                  className={`px-3 py-2 rounded border border-gray-300`}
+                  className={`px-3 py-2 rounded border border-gray-300 text-nowrap`}
                 >
                   Add Job
                 </Link>
@@ -39,9 +39,11 @@ export default function SuperAdmin() {
               <li>
                 <Link
                   to="/admin/manage"
-                  className={`px-3 py-2 rounded border border-gray-300`}
+                  className={`px-3 py-2 rounded border border-gray-300 text-nowrap ${
+                    pathname.includes("manage") && "bg-gray-300"
+                  }`}
                 >
-                  Management
+                  My Management
                 </Link>
               </li>
               <li>
