@@ -148,7 +148,7 @@ export default function Dashboard() {
                   <select
                     name="gender"
                     defaultValue={profile?.gender || ""}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Gender</option>
                     <option value="Male">Male</option>
@@ -189,7 +189,7 @@ export default function Dashboard() {
                   <select
                     name="sscGroup"
                     defaultValue={profile?.sscGroup || ""}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Group</option>
                     <option value="Science">Science</option>
@@ -218,7 +218,7 @@ export default function Dashboard() {
                   <select
                     name="sscMedium"
                     defaultValue={profile?.sscMedium || ""}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Medium</option>
                     <option value="Bangla">Bangla</option>
@@ -247,7 +247,7 @@ export default function Dashboard() {
                   <select
                     name="hscGroup"
                     defaultValue={profile?.hscGroup || ""}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Group</option>
                     <option value="Science">Science</option>
@@ -276,7 +276,7 @@ export default function Dashboard() {
                   <select
                     name="hscMedium"
                     defaultValue={profile?.hscMedium || ""}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+                    className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                   >
                     <option value="">Select Medium</option>
                     <option value="Bangla">Bangla</option>

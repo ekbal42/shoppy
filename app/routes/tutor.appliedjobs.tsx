@@ -3,7 +3,7 @@ import { LoaderFunction, json, redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
 import { getRelativeTime } from "~/utils";
-import { Eye } from "lucide-react";
+import { Eye, Inbox } from "lucide-react";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
@@ -43,7 +43,7 @@ export default function AppliedJobs() {
   return (
     <div>
       <div className="flex justify-between items-center p-4 border rounded-md bg-gray-100 mb-4">
-        <h1 className="text-2xl font-semibold">Applications</h1>
+        <h1 className="text-2xl font-medium">Applications</h1>
         <p className="bg-green-500 inline-flex ms-2 text-xs text-white px-2 py-1 rounded-full">
           {totalAppliedJobs}
         </p>
@@ -51,7 +51,11 @@ export default function AppliedJobs() {
       {/* Display applied jobs */}
       <div className="space-y-4">
         {appliedJobs.length === 0 ? (
-          <p>No jobs applied yet.</p>
+          <div className="flex justify-center flex-col items-center gap-3 mt-40 lg:mt-72">
+            <div className="bg-gray-200 p-4 rounded-full flex text-green-600">
+              <Inbox size={50} />
+            </div>
+          </div>
         ) : (
           appliedJobs.map((application: any) => (
             <div

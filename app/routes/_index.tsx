@@ -99,9 +99,9 @@ export default function Index() {
         {jobs.length === 0 ? (
           <>
             <div className="flex justify-center flex-col items-center gap-3 mt-40 lg:mt-72">
-              <p className="text-center flex  text-green-600">
-                <Inbox className="me-2" /> No jobs found.
-              </p>
+              <div className="bg-gray-200 p-4 rounded-full flex text-green-600">
+                <Inbox size={50} />
+              </div>
             </div>
           </>
         ) : (
