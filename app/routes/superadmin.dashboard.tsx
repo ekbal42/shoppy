@@ -1,5 +1,5 @@
 import { useLoaderData } from "@remix-run/react";
-import { LoaderFunction, json } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import {
   Briefcase,
@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async () => {
     where: { role: "superadmin" },
   });
 
-  return json({
+  return {
     totalJobs,
     newJobsToday,
     totalUsers,
@@ -49,7 +49,7 @@ export const loader: LoaderFunction = async () => {
     adminCount,
     tutorCount,
     superAdminCount,
-  });
+  };
 };
 
 export default function Dashboard() {

@@ -1,4 +1,4 @@
-import { json, LoaderFunction, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import { getUserFromSession } from "~/session.server";
@@ -18,7 +18,7 @@ export const action = async ({ request }: { request: Request }) => {
   const password = formData.get("password");
 
   if (!name || !email || !password) {
-    return json({ error: "All fields are required." }, { status: 400 });
+    return { error: "All fields are required." };
   }
 
   const existingUser = await prisma.user.findUnique({
@@ -26,10 +26,7 @@ export const action = async ({ request }: { request: Request }) => {
   });
 
   if (existingUser) {
-    return json(
-      { error: "User already exists with this email." },
-      { status: 400 }
-    );
+    return { error: "User already exists with this email." };
   }
 
   try {
@@ -45,10 +42,9 @@ export const action = async ({ request }: { request: Request }) => {
     return redirect("/auth/signin");
   } catch (error) {
     console.error(error);
-    return json(
-      { error: "Something went wrong while creating the user." },
-      { status: 500 }
-    );
+    return {
+      error: "Something went wrong while creating the user.",
+    };
   }
 };
 

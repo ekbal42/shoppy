@@ -1,4 +1,4 @@
-import { json, LoaderFunction, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import jwt from "jsonwebtoken";
@@ -21,7 +21,7 @@ export const action = async ({ request }: { request: Request }) => {
   const password = formData.get("password");
 
   if (!email || !password) {
-    return json({ error: "Email and password are required." }, { status: 400 });
+    return { error: "Email and password are required." };
   }
 
   const user = await prisma.user.findUnique({
@@ -29,11 +29,11 @@ export const action = async ({ request }: { request: Request }) => {
   });
 
   if (!user) {
-    return json({ error: "No user found with this email." }, { status: 400 });
+    return { error: "No user found with this email." };
   }
 
   if (user.password !== password) {
-    return json({ error: "Incorrect password." }, { status: 400 });
+    return { error: "Incorrect password." };
   }
 
   const token = jwt.sign(

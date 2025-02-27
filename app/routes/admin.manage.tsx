@@ -1,4 +1,3 @@
-import { json } from "@remix-run/node";
 import { useLoaderData, useSearchParams, useFetcher } from "@remix-run/react";
 import { ActionFunction, LoaderFunction } from "@vercel/remix";
 import { prisma } from "~/db.server";
@@ -42,14 +41,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
   });
 
-  return json({
+  return {
     managedJobs,
     pagination: {
       currentPage: page,
       totalPages: Math.ceil(totalManagedJobs / limit),
       totalManagedJobs,
     },
-  });
+  };
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -63,13 +62,13 @@ export const action: ActionFunction = async ({ request }) => {
         where: { id: parseInt(id) },
         data: { status: status as "active" | "inactive" },
       });
-      return json({ message: "Status updated successfully.", success: true });
+      return { message: "Status updated successfully.", success: true };
     } catch (error) {
-      return json({ message: "Error updating status.", success: false });
+      return { message: "Error updating status.", success: false };
     }
   }
 
-  return json({ message: "Invalid request.", success: false });
+  return { message: "Invalid request.", success: false };
 };
 
 type ActionResponse = { message: string; success?: boolean };

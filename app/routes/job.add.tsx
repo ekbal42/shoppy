@@ -1,4 +1,4 @@
-import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "react-router-dom";
 
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
@@ -14,7 +14,7 @@ export const loader: LoaderFunction = withAuth(
       const response = redirect(`/${user?.role}/dashboard`);
       throw response;
     }
-    return json({ user });
+    return { user };
   }
 );
 export const action: ActionFunction = async ({ request }) => {
@@ -36,10 +36,7 @@ export const action: ActionFunction = async ({ request }) => {
   const tutorDepartmentNeed = formData.get("tutorDepartmentNeed") as string;
   const postedById = parseInt(formData.get("postedById") as string);
   if (!title || !location || !publisher) {
-    return json(
-      { error: "Title, location, and publisher are required!" },
-      { status: 400 }
-    );
+    return { error: "Title, location, and publisher are required!" };
   }
   try {
     await prisma.job.create({
@@ -63,10 +60,9 @@ export const action: ActionFunction = async ({ request }) => {
 
     return redirect(`/`);
   } catch (error) {
-    return json(
-      { error: "Failed to create job. Please try again." },
-      { status: 500 }
-    );
+    return {
+      error: "Failed to create job. Please try again.",
+    };
   }
 };
 

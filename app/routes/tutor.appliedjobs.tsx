@@ -1,5 +1,5 @@
 import { useLoaderData, Link } from "@remix-run/react";
-import { LoaderFunction, json, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
 import { getRelativeTime } from "~/utils";
@@ -28,13 +28,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     orderBy: { appliedAt: "desc" },
   });
 
-  return json({
+  return {
     appliedJobs,
     totalAppliedJobs,
     currentPage: page,
     perPage,
     totalPages: Math.ceil(totalAppliedJobs / perPage),
-  });
+  };
 };
 
 export default function AppliedJobs() {

@@ -1,6 +1,6 @@
 import { prisma } from "~/db.server";
 import { Job } from "@prisma/client";
-import { json, LoaderFunction, ActionFunction } from "@remix-run/node";
+import { LoaderFunction, ActionFunction } from "@remix-run/node";
 import {
   Link,
   useFetcher,
@@ -42,14 +42,14 @@ export const loader: LoaderFunction = async ({ request }) => {
       managedBy: true,
     },
   });
-  return json({
+  return {
     jobs,
     pagination: {
       currentPage: page,
       totalPages: Math.ceil(totalJobs / limit),
       totalJobs,
     },
-  });
+  };
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -78,16 +78,16 @@ export const action: ActionFunction = async ({ request }) => {
         }),
       ]);
 
-      return json({
+      return {
         message: "Job successfully added to managed jobs.",
         success: true,
-      });
+      };
     } catch (error) {
       console.error("Error managing job:", error);
-      return json({ message: "Error managing job.", success: false });
+      return { message: "Error managing job.", success: false };
     }
   }
-  return json({ message: "Invalid request.", success: false });
+  return { message: "Invalid request.", success: false };
 };
 
 type ActionResponse = { message: string; success?: boolean };

@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@remix-run/node";
+import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import {
   Banknote,
@@ -59,28 +59,25 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const allApplications = await prisma.jobApplication.findMany({
     where: { jobId },
   });
-  return json({ job, hasApplied, user, allApplications });
+  return { job, hasApplied, user, allApplications };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
   if (!userId) {
-    return json(
-      { success: false, error: "User not authenticated" },
-      { status: 401 }
-    );
+    return { success: false, error: "User not authenticated" };
   }
   const formData = await request.formData();
   const jobId = Number(formData.get("jobId"));
   if (isNaN(jobId)) {
-    return json({ success: false, error: "Invalid Job ID" }, { status: 400 });
+    return { success: false, error: "Invalid Job ID" };
   }
   const existingApplication = await prisma.jobApplication.findFirst({
     where: { userId, jobId },
   });
   if (existingApplication) {
-    return json({ success: false, error: "Already applied" }, { status: 400 });
+    return { success: false, error: "Already applied" };
   }
   await prisma.jobApplication.create({
     data: {
@@ -88,7 +85,7 @@ export async function action({ request }: ActionFunctionArgs) {
       jobId,
     },
   });
-  return json({ success: true });
+  return { success: true };
 }
 
 export default function JobDetailsPage() {

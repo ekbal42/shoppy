@@ -1,4 +1,4 @@
-import { json, LoaderFunction, redirect } from "@remix-run/node";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import { ActionFunction } from "@vercel/remix";
 import { prisma } from "~/db.server";
@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
   });
   const alljobs = await prisma.job.findMany();
-  return json({ profile, user, alljobs, appliedJobs });
+  return { profile, user, alljobs, appliedJobs };
 };
 
 export const action: ActionFunction = async ({ request }) => {

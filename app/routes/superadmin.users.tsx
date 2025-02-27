@@ -1,6 +1,6 @@
 import { prisma } from "~/db.server";
 import { User } from "@prisma/client";
-import { json, LoaderFunction, ActionFunction } from "@remix-run/node";
+import { LoaderFunction, ActionFunction } from "@remix-run/node";
 import { useFetcher, useLoaderData, useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import { Trash } from "lucide-react";
@@ -31,14 +31,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
   });
 
-  return json({
+  return {
     users,
     pagination: {
       currentPage: page,
       totalPages: Math.ceil(totalUsers / limit),
       totalUsers,
     },
-  });
+  };
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -50,22 +50,22 @@ export const action: ActionFunction = async ({ request }) => {
   if (deleteId) {
     try {
       await prisma.user.delete({ where: { id: parseInt(deleteId) } });
-      return json({ message: "User successfully deleted.", success: true });
+      return { message: "User successfully deleted.", success: true };
     } catch (error) {
-      return json({ message: "Error deleting user.", success: false });
+      return { message: "Error deleting user.", success: false };
     }
   }
 
   if (id && role) {
     try {
       await prisma.user.update({ where: { id: parseInt(id) }, data: { role } });
-      return json({ message: "Role updated successfully.", success: true });
+      return { message: "Role updated successfully.", success: true };
     } catch (error) {
-      return json({ message: "Error updating role.", success: false });
+      return { message: "Error updating role.", success: false };
     }
   }
 
-  return json({ message: "Invalid request.", success: false });
+  return { message: "Invalid request.", success: false };
 };
 
 type ActionResponse = { message: string; success?: boolean };

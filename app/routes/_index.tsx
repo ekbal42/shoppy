@@ -1,5 +1,4 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData, Link, useSearchParams, Form } from "@remix-run/react";
 import { Calendar, Inbox, User } from "lucide-react";
 import { prisma } from "~/db.server";
@@ -41,7 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     take: perPage,
   });
 
-  return json({ jobs, search, filter, page, perPage, totalJobs });
+  return { jobs, search, filter, page, perPage, totalJobs };
 };
 
 export default function Index() {
