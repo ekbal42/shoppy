@@ -8,6 +8,11 @@ import { ActionFunction, LoaderFunction } from "@vercel/remix";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
 import React, { useState, useEffect } from "react";
+import {
+  ApplicationStage,
+  stageColors,
+  stageOptions,
+} from "~/components/StageBadge";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
@@ -308,15 +313,12 @@ export default function Manage() {
                                   </td>
                                   <td className="px-4 py-2">
                                     <select
-                                      className={`px-3 py-1 rounded-full border appearance-none ${
-                                        app.stage === "APPLIED"
-                                          ? "ring-2 ring-blue-500"
-                                          : app.stage === "INTERVIEW"
-                                          ? "ring-2 ring-yellow-500"
-                                          : app.stage === "REJECTED"
-                                          ? "ring-2 ring-red-500"
-                                          : "ring-2 ring-green-500"
-                                      }`}
+                                      className={`px-3 py-1 rounded-full border appearance-none
+                                        ring-2 ring-${
+                                          stageColors[
+                                            app.stage as ApplicationStage
+                                          ]
+                                        }-500`}
                                       value={app.stage}
                                       onChange={(e) =>
                                         handleApplicationStatusChange(
@@ -327,12 +329,14 @@ export default function Manage() {
                                       disabled={fetcher.state === "submitting"}
                                       aria-label="Change application stage"
                                     >
-                                      <option value="APPLIED">Applied</option>
-                                      <option value="INTERVIEW">
-                                        Interview
-                                      </option>
-                                      <option value="HIRED">Hired</option>
-                                      <option value="REJECTED">Rejected</option>
+                                      {stageOptions.map((option) => (
+                                        <option
+                                          key={option.value}
+                                          value={option.value}
+                                        >
+                                          {option.label}
+                                        </option>
+                                      ))}
                                     </select>
                                   </td>
                                   <td className="px-4 py-2">

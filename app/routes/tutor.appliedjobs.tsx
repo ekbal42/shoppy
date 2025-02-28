@@ -4,6 +4,7 @@ import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
 import { getRelativeTime } from "~/utils";
 import { Eye, Inbox } from "lucide-react";
+import StageBadge from "~/components/StageBadge";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
@@ -44,7 +45,7 @@ export default function AppliedJobs() {
     <div>
       <div className="flex justify-between items-center p-4 border rounded-md bg-gray-100 mb-4">
         <h1 className="text-xl font-normal">Applications</h1>
-        <p className="bg-green-500 inline-flex ms-2 text-sm text-white px-2 py-1 rounded-full">
+        <p className="bg-green-500 inline-flex ms-2 text-sm text-white px-3 py-1 rounded-full">
           {totalAppliedJobs}
         </p>
       </div>
@@ -71,7 +72,7 @@ export default function AppliedJobs() {
                     {application.job.title}
                   </h2>
                   <p className="text-gray-600">{application.job.description}</p>
-                  <p className="text-sm text-gray-500 text-nowrap">
+                  <p className="text-sm text-gray-500 text-nowrap underline">
                     <span className="me-1">
                       {new Date(application.appliedAt).toLocaleDateString()}
                     </span>
@@ -80,9 +81,7 @@ export default function AppliedJobs() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="bg-blue-100 text-nowrap text-blue-500 text-sm border border-blue-500 px-3 py-1 rounded-full">
-                  {application.stage}
-                </div>
+                <StageBadge stage={application.stage} />
                 <Link to={`/job/details/${application.job?.id}`}>
                   <button className="bg-gray-200 px-2 py-2 rounded-full text-black">
                     <Eye />

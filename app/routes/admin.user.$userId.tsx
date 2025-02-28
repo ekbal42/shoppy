@@ -62,7 +62,7 @@ export default function User() {
                 {/* Basic Info Card */}
                 <div className="lg:col-span-1">
                   <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-md transform hover:-translate-y-1 transition-all duration-300">
-                    <div className="flex items-center gap-3 mb-5">
+                    <div className="flex items-center gap-4 mb-5">
                       <div className="bg-blue-100 p-2 rounded-full">
                         <svg
                           className="w-6 h-6 text-blue-600"
@@ -83,25 +83,25 @@ export default function User() {
                       </h3>
                     </div>
                     <div className="space-y-4">
-                      <div className="bg-white/50 p-3 rounded-lg">
+                      <div className="bg-white/50 p-4 rounded-lg">
                         <span className="font-medium text-gray-700">Bio</span>
-                        <p className="text-gray-800 mt-1">
+                        <p className="text-gray-500 mt-1 font-mono">
                           {user.profile.bio || "Not provided"}
                         </p>
                       </div>
-                      <div className="bg-white/50 p-3 rounded-lg">
+                      <div className="bg-white/50 p-4 rounded-lg">
                         <span className="font-medium text-gray-700">
                           Gender
                         </span>
-                        <p className="text-gray-800 mt-1">
+                        <p className="text-gray-500 font-mono mt-1">
                           {user.profile.gender || "Not specified"}
                         </p>
                       </div>
-                      <div className="bg-white/50 p-3 rounded-lg">
+                      <div className="bg-white/50 p-4 rounded-lg">
                         <span className="font-medium text-gray-700">
                           Location
                         </span>
-                        <p className="text-gray-800 mt-1">
+                        <p className="text-gray-500 font-mono mt-1">
                           {user.profile.livingLocation || "Not set"}
                         </p>
                       </div>
@@ -112,7 +112,7 @@ export default function User() {
                 {/* Education Card */}
                 <div className="lg:col-span-1">
                   <div className="bg-gradient-to-br from-green-50 to-teal-50 p-6 rounded-md transform hover:-translate-y-1 transition-all duration-300">
-                    <div className="flex items-center gap-3 mb-5">
+                    <div className="flex items-center gap-4 mb-5">
                       <div className="bg-green-100 p-2 rounded-full">
                         <svg
                           className="w-6 h-6 text-green-600"
@@ -139,29 +139,56 @@ export default function User() {
                       </h3>
                     </div>
                     <div className="space-y-4">
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <p className="font-medium text-gray-700">Exam : SSC</p>
-                        <p className="text-gray-800 mt-1">
-                          School : {user.profile.sscSchool || "N/A"}
+                      <div className="bg-white/50 p-4 rounded-lg">
+                        <p className="font-medium text-gray-700 uppercase">
+                          SSC Stage
                         </p>
-                        <p> Result : {user.profile.sscResult || "N/A"}</p>
+                        <p className="text-gray-800 mt-1">
+                          School :
+                          <span className="font-mono ms-1 text-gray-500">
+                            {user.profile.sscSchool || "N/A"}
+                          </span>
+                        </p>
+                        <p>
+                          Result :
+                          <span className="font-mono ms-1 text-gray-500">
+                            GPA {user.profile.sscResult || "N/A"}
+                          </span>
+                        </p>
                       </div>
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <p className="font-medium text-gray-700">Exam : HSC</p>
-                        <p className="text-gray-800 mt-1">
-                          College : {user.profile.hscCollege || "N/A"}
+                      <div className="bg-white/50 p-4 rounded-lg">
+                        <p className="font-medium text-gray-700 uppercase">
+                          HSC Stage
                         </p>
                         <p className="text-gray-800 mt-1">
-                          Result : {user.profile.hscResult || "N/A"}
+                          School :
+                          <span className="font-mono ms-1 text-gray-500">
+                            {user.profile.hscCollege || "N/A"}
+                          </span>
+                        </p>
+                        <p>
+                          Result :
+                          <span className="font-mono ms-1 text-gray-500">
+                            GPA {user.profile.hscResult || "N/A"}
+                          </span>
                         </p>
                       </div>
-                      <div className="bg-white/50 p-3 rounded-lg">
-                        <p className="font-medium text-gray-700">University</p>
-                        <p className="text-gray-800 mt-1">
-                          University : {user.profile.currentUniversity || "N/A"}
+
+                      <div className="bg-white/50 p-4 rounded-lg">
+                        <p className="font-medium text-gray-700 uppercase">
+                          University
                         </p>
                         <p className="text-gray-800 mt-1">
-                          Department : {user.profile.currentDepartment || "N/A"}
+                          University :
+                          <span className="font-mono ms-1 text-gray-500">
+                            GPA {user.profile.currentUniversity || "N/A"}
+                          </span>
+                        </p>
+                        <p className="text-gray-800 mt-1">
+                          Department :
+                          <span className="font-mono ms-1 text-gray-500">
+                            GPA {user.profile.currentDepartment || "N/A"}
+                          </span>
                         </p>
                       </div>
                     </div>
@@ -171,7 +198,7 @@ export default function User() {
                 {/* Preferred Locations Card */}
                 <div className="lg:col-span-1">
                   <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-md transform hover:-translate-y-1 transition-all duration-300">
-                    <div className="flex items-center gap-3 mb-5">
+                    <div className="flex items-center gap-4 mb-5">
                       <div className="bg-purple-100 p-2 rounded-full">
                         <svg
                           className="w-6 h-6 text-purple-600"
@@ -204,7 +231,7 @@ export default function User() {
                           .map((location, index) => (
                             <div
                               key={index}
-                              className="bg-white/50 p-3 rounded-lg flex items-center justify-between hover:bg-white/70 transition-colors"
+                              className="bg-white/50 p-4 font-mono rounded-lg flex items-center justify-between hover:bg-white/70 transition-colors"
                             >
                               <span className="text-gray-800">
                                 {location.trim() || "N/A"}
@@ -215,7 +242,7 @@ export default function User() {
                             </div>
                           ))
                       ) : (
-                        <div className="bg-white/50 p-3 rounded-lg text-gray-600">
+                        <div className="bg-white/50 p-4 rounded-lg text-gray-600">
                           No preferred locations set
                         </div>
                       )}
