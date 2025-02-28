@@ -81,7 +81,7 @@ export default function AppliedJobs() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="bg-blue-100 text-nowrap text-blue-500 text-sm border border-blue-500 px-3 py-1 rounded-full">
-                  Just Applied
+                  {application.stage}
                 </div>
                 <Link to={`/job/details/${application.job?.id}`}>
                   <button className="bg-gray-200 px-2 py-2 rounded-full text-black">

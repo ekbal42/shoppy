@@ -121,7 +121,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="col-span-2">
-          <div className="">
+          <div>
             <div className="bg-gray-100 p-4 px-6 mb-4 border rounded-md">
               <p className="text-lg text-green-500 uppercase font-semibold">
                 User profile
