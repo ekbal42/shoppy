@@ -7,14 +7,12 @@ import {
 import { ActionFunction, LoaderFunction } from "@vercel/remix";
 import { prisma } from "~/db.server";
 import { getUserFromSession } from "~/session.server";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   ApplicationStage,
   stageColors,
   stageOptions,
 } from "~/components/StageBadge";
-import { Notification } from "~/components/Notification";
-
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = user?.userId;
@@ -87,9 +85,13 @@ export const action: ActionFunction = async ({ request }) => {
         where: { id: parseInt(id as string) },
         data: { status: status as "active" | "inactive" },
       });
-      return { message: "Job status updated successfully.", success: true };
+      return {
+        toast: { message: "Job status updated successfully.", type: "success" },
+      };
     } catch (error) {
-      return { message: "Error updating job status.", success: false };
+      return {
+        toast: { message: "Job status update faild!.", type: "error" },
+      };
     }
   }
 
@@ -100,18 +102,29 @@ export const action: ActionFunction = async ({ request }) => {
         data: { stage: status as string },
       });
       return {
-        message: "Application status updated successfully.",
-        success: true,
+        toast: {
+          message: "Application status updated successfully.",
+          type: "success",
+        },
       };
     } catch (error) {
-      return { message: "Error updating application status.", success: false };
+      return {
+        toast: {
+          message: "Error updating application status.",
+          type: "success",
+        },
+      };
     }
   }
 
-  return { message: "Invalid request.", success: false };
+  return {
+    toast: {
+      message: "Invalid request.",
+      type: "error",
+    },
+  };
 };
 
-type ActionResponse = { message: string; success?: boolean };
 type LoaderData = {
   managedJobs: any[];
   pagination: {
@@ -124,21 +137,9 @@ type LoaderData = {
 export default function Manage() {
   const { managedJobs, pagination } = useLoaderData<LoaderData>();
   const fetcher = useFetcher();
-  const fetcherData = fetcher.data as ActionResponse;
-  const [messageVisible, setMessageVisible] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
   const [expandedJobId, setExpandedJobId] = useState<number | null>(null);
-  useEffect(() => {
-    if (fetcherData?.message) {
-      setMessageVisible(true);
-      const timer = setTimeout(() => {
-        setMessageVisible(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [fetcherData]);
-
   const handleStatusChange = (id: number, newStatus: string) => {
     fetcher.submit({ id: String(id), status: newStatus }, { method: "POST" });
   };
@@ -174,12 +175,6 @@ export default function Manage() {
 
   return (
     <div className="max-w-full p-4">
-      {messageVisible && fetcherData?.message && fetcherData.success && (
-        <Notification message={fetcherData.message} type={"success"} />
-      )}
-      {messageVisible && fetcherData?.message && !fetcherData.success && (
-        <Notification message={fetcherData.message} type={"error"} />
-      )}
       <h1 className="text-2xl font-semibold mb-4">My Management</h1>
       <div className="mb-4">
         <input
@@ -257,14 +252,14 @@ export default function Manage() {
                   <td className="px-4 py-2">
                     <Link
                       to={`/job/details/${job.id}`}
-                      className="inline-flex items-center underline text-blue-500 hover:text-blue-700"
+                      className="inline-flex items-center text-nowrap underline text-blue-500 hover:text-blue-700"
                       aria-label="View job details"
                     >
                       See Job
                     </Link>
                     <button
                       onClick={() => toggleApplications(job.id)}
-                      className="ml-2 underline text-blue-500 hover:text-blue-700"
+                      className="lg:ml-2 underline text-blue-500 text-nowrap hover:text-blue-700"
                       aria-label="Toggle applications"
                     >
                       See Applications ({job.applications.length})

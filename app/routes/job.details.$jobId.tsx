@@ -66,18 +66,33 @@ export async function action({ request }: ActionFunctionArgs) {
   const user = getUserFromSession(request);
   const userId = Number(user?.userId);
   if (!userId) {
-    return { success: false, error: "User not authenticated" };
+    return {
+      toast: {
+        message: "User not authenticated",
+        type: "error",
+      },
+    };
   }
   const formData = await request.formData();
   const jobId = Number(formData.get("jobId"));
   if (isNaN(jobId)) {
-    return { success: false, error: "Invalid Job ID" };
+    return {
+      toast: {
+        message: "Invalid Job ID",
+        type: "error",
+      },
+    };
   }
   const existingApplication = await prisma.jobApplication.findFirst({
     where: { userId, jobId },
   });
   if (existingApplication) {
-    return { success: false, error: "Already applied" };
+    return {
+      toast: {
+        message: "Already applied",
+        type: "error",
+      },
+    };
   }
   await prisma.jobApplication.create({
     data: {
@@ -85,7 +100,12 @@ export async function action({ request }: ActionFunctionArgs) {
       jobId,
     },
   });
-  return { success: true };
+  return {
+    toast: {
+      message: "Job application successfull!",
+      type: "success",
+    },
+  };
 }
 
 export default function JobDetailsPage() {
@@ -101,16 +121,6 @@ export default function JobDetailsPage() {
   };
   return (
     <div className="px-4 lg:ps-4 xl:p-0 pb-8">
-      {fetcher.state === "idle" && fetcher.data?.success && (
-        <div className="mt-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-500">
-          Successfully applied for the job!
-        </div>
-      )}
-      {fetcher.state === "idle" && fetcher.data?.error && (
-        <div className="mt-4 p-4 bg-red-100 text-red-700 rounded-lg border border-red-500">
-          {fetcher.data.error}
-        </div>
-      )}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-0 lg:gap-4 xl:gap-8 mt-4">
         <div className="col-span-2">
           <div className="flex flex-wrap gap-4 justify-between items-center">
