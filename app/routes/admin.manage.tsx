@@ -13,6 +13,7 @@ import {
   stageColors,
   stageOptions,
 } from "~/components/StageBadge";
+import { Notification } from "~/components/Notification";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
@@ -173,18 +174,12 @@ export default function Manage() {
 
   return (
     <div className="max-w-full p-4">
-      {messageVisible && fetcherData?.message && (
-        <div
-          className={`mb-4 p-4 rounded-lg ${
-            fetcherData.success
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {fetcherData.message}
-        </div>
+      {messageVisible && fetcherData?.message && fetcherData.success && (
+        <Notification message={fetcherData.message} type={"success"} />
       )}
-
+      {messageVisible && fetcherData?.message && !fetcherData.success && (
+        <Notification message={fetcherData.message} type={"error"} />
+      )}
       <h1 className="text-2xl font-semibold mb-4">My Management</h1>
       <div className="mb-4">
         <input
