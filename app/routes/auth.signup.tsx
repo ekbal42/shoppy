@@ -56,7 +56,7 @@ export default function Signup() {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded bg-gray-100 border">
         <h1 className="text-start text-green-500 mb-4 text-2xl font-extrabold">
-          Jobify Sign Up~
+          Jobifybd Sign Up~
         </h1>
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Create a new account 🔑</h1>

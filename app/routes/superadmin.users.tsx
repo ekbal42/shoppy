@@ -14,8 +14,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const totalUsers = await prisma.user.count({
     where: {
       OR: [
-        { name: { contains: search, lte: "insensitive" } },
-        { email: { contains: search, lte: "insensitive" } },
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
       ],
     },
   });
@@ -25,8 +25,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     take: limit,
     where: {
       OR: [
-        { name: { contains: search, lte: "insensitive" } },
-        { email: { contains: search, lte: "insensitive" } },
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
       ],
     },
   });
@@ -128,8 +128,12 @@ export default function Users() {
           {fetcherData.message}
         </div>
       )}
-
-      <h1 className="text-2xl font-semibold mb-4"> All Users</h1>
+      <h1 className="text-2xl font-semibold mb-4">
+        All Users
+        <span className="ms-2 bg-green-400 px-2 text-sm py-1 text-white border rounded">
+          {pagination.totalUsers}
+        </span>
+      </h1>
       <div className="mb-4">
         <input
           type="text"

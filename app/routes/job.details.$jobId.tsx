@@ -259,7 +259,7 @@ export default function JobDetailsPage() {
         <div className="col-span-2 lg:col-span-1">
           <div className="space-y-4">
             <div className="p-4 border rounded-md bg-gray-50">
-              <p className="underline">Jobify.com</p>
+              <p className="underline font-mono">{window.location.hostname}</p>
             </div>
             <div className="flex justify-between items-center">
               <p className="text-gray-700 font-semibold">Publisher</p>
