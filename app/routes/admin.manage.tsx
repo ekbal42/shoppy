@@ -13,6 +13,7 @@ import {
   stageColors,
   stageOptions,
 } from "~/components/StageBadge";
+import { ExternalLink } from "lucide-react";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   const userId = user?.userId;
@@ -287,7 +288,7 @@ export default function Manage() {
                               </tr>
                             </thead>
                             <tbody>
-                              {job.applications.map((app: any) => (
+                              {job.applications.slice(0, 5).map((app: any) => (
                                 <tr
                                   key={app.id}
                                   className="border-b hover:bg-gray-50"
@@ -349,6 +350,17 @@ export default function Manage() {
                             No applications found.
                           </p>
                         )}
+                        <div className="flex justify-center mt-3">
+                          <Link
+                            to={`/admin/applications/${job.id}`}
+                            target="_blank"
+                            className="text-center underline text-blue-500"
+                            rel="noreferrer"
+                          >
+                            See All
+                            <ExternalLink size={20} className="inline ms-1" />
+                          </Link>
+                        </div>
                       </div>
                     </td>
                   </tr>

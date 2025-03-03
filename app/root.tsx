@@ -7,6 +7,7 @@ import {
   useActionData,
   useFetchers,
   useMatches,
+  useRouteError,
 } from "@remix-run/react";
 import { Notification } from "./components/Notification";
 import { useEffect, useState } from "react";
@@ -114,6 +115,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError() as any;
+  return (
+    <div className="flex items-center gap-2 justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold text-gray-800">{error.status}</h1>
+      <p>{error.data} ~</p>
+    </div>
+  );
 }
 export interface LoaderData {
   toast?: Toast;
