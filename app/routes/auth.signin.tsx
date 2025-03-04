@@ -15,21 +15,29 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
   return {};
 };
+
 export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
-  const email = formData.get("email");
+  const emailOrPhone = formData.get("emailOrPhone");
   const password = formData.get("password");
 
-  if (!email || !password) {
-    return { error: "Email and password are required." };
+  if (!emailOrPhone || !password) {
+    return { error: "Email/Phone and password are required." };
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email },
+  const isEmail = emailOrPhone.includes("@");
+
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { email: isEmail ? emailOrPhone : undefined },
+        { phone: !isEmail ? emailOrPhone : undefined },
+      ],
+    },
   });
 
   if (!user) {
-    return { error: "No user found with this email." };
+    return { error: "No user found with this email or phone." };
   }
 
   if (user.password !== password) {
@@ -77,9 +85,9 @@ export default function Signin() {
               </div>
             )}
             <input
-              type="email"
-              name="email"
-              placeholder="Email"
+              type="text"
+              name="emailOrPhone"
+              placeholder="Email/Phone"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
@@ -99,7 +107,7 @@ export default function Signin() {
           </Form>
           <Link to="/auth/signup">
             <p className="text-sm text-center hover:text-green-500 hover:underline">
-              Dont have an account? Create Account!
+              Don't have an account? Create Account!
             </p>
           </Link>
         </div>

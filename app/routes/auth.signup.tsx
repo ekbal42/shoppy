@@ -16,17 +16,25 @@ export const action = async ({ request }: { request: Request }) => {
   const name = formData.get("name");
   const email = formData.get("email");
   const password = formData.get("password");
+  const phone = formData.get("phone");
 
-  if (!name || !email || !password) {
+  if (!name || !email || !password || !phone) {
     return { error: "All fields are required." };
   }
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email },
+  const existingUser = await prisma.user.findFirst({
+    where: {
+      OR: [{ email }, { phone }],
+    },
   });
 
   if (existingUser) {
-    return { error: "User already exists with this email." };
+    if (existingUser.email === email) {
+      return { error: "User already exists with this email." };
+    }
+    if (existingUser.phone === phone) {
+      return { error: "User already exists with this phone number." };
+    }
   }
 
   try {
@@ -35,6 +43,7 @@ export const action = async ({ request }: { request: Request }) => {
         name,
         email,
         password,
+        phone,
         role: "tutor",
       },
     });
@@ -61,9 +70,7 @@ export default function Signup() {
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Create a new account 🔑</h1>
 
-          {/* Form for user signup */}
           <Form method="post" className="flex flex-col gap-4">
-            {/* Show error message if exists */}
             {actionData?.error && (
               <div className="text-red-500 text-sm bg-red-100 p-3">
                 {actionData.error}
@@ -74,6 +81,13 @@ export default function Signup() {
               type="text"
               name="name"
               placeholder="Full Name"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
+              required
+            />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
@@ -91,6 +105,7 @@ export default function Signup() {
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
               required
             />
+
             <button
               className="bg-green-500 text-white py-2 rounded"
               disabled={navigation?.state === "submitting"}
