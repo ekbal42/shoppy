@@ -70,42 +70,46 @@ export default function Signin() {
   const navigation = useNavigation();
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded bg-gray-100 border">
-        <h1 className="text-start text-green-500 mb-4 text-2xl font-extrabold">
-          Shoppy Sign In~
-        </h1>
-        <div className="flex flex-col gap-4">
-          <h1 className="capitalize text-lg">Sign In to your account 🔑</h1>
+      <div className="card bg-base-100 shadow-md w-full max-w-md mx-auto p-4 md:p-8">
+        <h2 className="card-title text-2xl mb-1">Login to Shoppy</h2>
+        <p>Manage your shop and products with ease.</p>
+        <div className="flex flex-col gap-4 mt-4">
           <Form method="post" className="flex flex-col gap-4">
             {actionData?.error && (
-              <div className="text-red-500 text-sm bg-red-100 p-3">
-                {actionData.error}
+              <div role="alert" className="alert alert-error alert-soft">
+                <span>{actionData.error}</span>
               </div>
             )}
-            <input
-              type="text"
-              name="emailOrPhone"
-              placeholder="Email/Phone"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Email or Phone</legend>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Type here"
+                name="emailOrPhone"
+                required
+              />
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Shop Password</legend>
+              <input
+                type="password"
+                className="input w-full"
+                placeholder="Type here"
+                name="password"
+                required
+              />
+            </fieldset>
             <button
-              className="bg-green-500 text-white py-2 rounded"
+              className="btn btn-neutral w-full"
               disabled={navigation?.state === "submitting"}
             >
               {navigation?.state === "submitting" ? "Signing In..." : "Sign In"}
             </button>
           </Form>
           <Link to="/auth/signup">
-            <p className="text-sm text-center hover:text-green-500 hover:underline">
-              Don't have an account? Create Account!
+            <p className="text-sm text-center hover:text-neutral hover:underline">
+              Dont have an account? Create Account!
             </p>
           </Link>
         </div>

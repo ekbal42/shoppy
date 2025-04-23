@@ -1,5 +1,4 @@
 import type { MetaFunction } from "@remix-run/node";
-import Navbar from "~/components/Navbar";
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,8 +9,10 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="min-w-80">
-      <Navbar />
+    <div className="min-w-80 h-screen relative">
+      <div className="absolute top-0 left-0 right-0 bg-yellow-400 text-black text-center py-2 font-bold z-10">
+        🚧 UNDER CONSTRUCTION 🚧
+      </div>
     </div>
   );
 }

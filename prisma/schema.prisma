@@ -22,7 +22,9 @@ model User {
 model Shop {
   id        String   @id @default(uuid())
   name      String
+  urlName   String   @unique
   phone     String   @unique
+  description String?
   address   String?
   products  Product[]
   owner     User     @relation(fields: [ownerId], references: [id])

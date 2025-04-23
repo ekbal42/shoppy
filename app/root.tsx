@@ -1,4 +1,4 @@
-import "./tailwind.css";
+import "./index.css";
 import {
   Links,
   Meta,

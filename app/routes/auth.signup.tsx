@@ -62,59 +62,67 @@ export default function Signup() {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded bg-gray-100 border">
-        <h1 className="text-start text-green-500 mb-4 text-2xl font-extrabold">
-          Shoppy Sign Up~
-        </h1>
-        <div className="flex flex-col gap-4">
-          <h1 className="capitalize text-lg">Create a new account 🔑</h1>
-
+      <div className="card bg-base-100 shadow-md w-full max-w-md mx-auto p-4 md:p-8">
+        <h2 className="card-title text-2xl mb-1">Register to Shoppy</h2>
+        <p>Create an account to start shopping with us.</p>
+        <div className="flex flex-col gap-4 mt-4">
           <Form method="post" className="flex flex-col gap-4">
             {actionData?.error && (
-              <div className="text-red-500 text-sm bg-red-100 p-3">
-                {actionData.error}
+              <div role="alert" className="alert alert-error alert-soft">
+                <span>{actionData.error}</span>
               </div>
             )}
 
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
-            <input
-              type="text"
-              name="phone"
-              placeholder="Phone"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-              required
-            />
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">What is your name?</legend>
+              <input
+                type="text"
+                className="input w-full"
+                placeholder="Type here"
+                name="name"
+                required
+              />
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Enter your phone.</legend>
+              <input
+                type="tel"
+                className="input w-full"
+                placeholder="Type here"
+                name="phone"
+                required
+              />
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Enter your email.</legend>
+              <input
+                type="email"
+                className="input w-full"
+                placeholder="Type here"
+                name="email"
+                required
+              />
+            </fieldset>
+            <fieldset className="fieldset">
+              <legend className="fieldset-legend">Password you prefer.</legend>
+              <input
+                type="password"
+                className="input w-full"
+                placeholder="Type here"
+                name="password"
+                required
+              />
+            </fieldset>
 
             <button
-              className="bg-green-500 text-white py-2 rounded"
+              className="btn btn-neutral w-full"
               disabled={navigation?.state === "submitting"}
             >
               {navigation?.state === "submitting" ? "Signing Up..." : "Sign Up"}
             </button>
           </Form>
-
           <Link to="/auth/signin">
-            <p className="text-sm text-center hover:text-green-500 hover:underline">
+            <p className="text-sm text-center hover:text-neutral hover:underline">
               Already have an account? Sign In!
             </p>
           </Link>

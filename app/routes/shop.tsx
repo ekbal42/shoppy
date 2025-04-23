@@ -1,5 +1,11 @@
 import { Link, Outlet, useLocation } from "@remix-run/react";
-import { Power, LayoutDashboard, PlusSquare, List } from "lucide-react";
+import {
+  Power,
+  LayoutDashboard,
+  PlusSquare,
+  List,
+  ShoppingCart,
+} from "lucide-react";
 import { withAuth } from "~/middlewares/withAuth";
 
 export const loader = withAuth(async () => {
@@ -10,13 +16,18 @@ export default function Tutor() {
   const path = useLocation().pathname;
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="navbar bg-base-100 shadow-sm border-b">
+        <div className="container px-4 mx-auto">
           <div className="flex justify-between h-16 items-center">
             <Link
               to="/"
-              className="text-2xl font-bold uppercase text-green-600 hover:text-green-700 transition-colors"
+              className="text-2xl font-bold flex gap-2 uppercase text-primary"
             >
+              <ShoppingCart
+                size={30}
+                className="text-primary"
+                strokeWidth={3}
+              />
               Shoppy
             </Link>
 
@@ -33,53 +44,94 @@ export default function Tutor() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row">
-          <aside className="w-full md:w-64 py-4 md:py-8 pr-4">
-            <nav className="space-y-1">
+          <ul className="menu w-56 mt-4 me-4 space-y-2">
+            <li>
               <Link
                 to="/shop/dashboard"
-                className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
-                  ${
-                    path.includes("/shop/dashboard")
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                className={
+                  path.includes("/shop/dashboard") ? "menu-active" : ""
+                }
               >
                 <LayoutDashboard className="flex-shrink-0 h-5 w-5 mr-3" />
-                <span className="truncate">Dashboard</span>
+                Dashboard
               </Link>
-
+            </li>
+             <li>
               <Link
                 to="#"
-                className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
-                  ${
-                    path.includes("/shop/add")
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                className={path.includes("/shop/add") ? "menu-active" : ""}
               >
                 <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                <span className="truncate">Add Product</span>
+                Add Product
               </Link>
-
+            </li>
+            <li>
               <Link
                 to="#"
-                className={`group flex items-center px-3 py-3 text-sm font-medium rounded-lg transition-colors
-                  ${
-                    path.includes("/shop/products")
-                      ? "bg-green-100 text-green-700"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
+                className={path.includes("/shop/products") ? "menu-active" : ""}
               >
                 <List className="flex-shrink-0 h-5 w-5 mr-3" />
-                <span className="truncate">Products</span>
+                Products
               </Link>
-            </nav>
-          </aside>
+            </li> 
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/add") ? "menu-active" : ""}
+              >
+                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
+                Add Product
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/products") ? "menu-active" : ""}
+              >
+                <List className="flex-shrink-0 h-5 w-5 mr-3" />
+                Products
+              </Link>
+            </li> <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/add") ? "menu-active" : ""}
+              >
+                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
+                Add Product
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/products") ? "menu-active" : ""}
+              >
+                <List className="flex-shrink-0 h-5 w-5 mr-3" />
+                Products
+              </Link>
+            </li> <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/add") ? "menu-active" : ""}
+              >
+                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
+                Add Product
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/products") ? "menu-active" : ""}
+              >
+                <List className="flex-shrink-0 h-5 w-5 mr-3" />
+                Products
+              </Link>
+            </li> 
+          </ul>
 
-          <main className="flex-1 py-8">
-            <div className="bg-white shadow-sm rounded-lg p-4">
+          <main className="flex-1 border-s">
+            <div className="p-4 min-h-[calc(100vh-90px)]">
               <Outlet />
             </div>
           </main>
