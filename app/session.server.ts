@@ -7,7 +7,6 @@ interface User {
   name: string;
   userId: string;
   email: string;
-  role: "tutor" | "student" | "admin" | "superadmin";
 }
 export function getUserFromSession(request: Request) {
   const cookies = parse(request.headers.get("Cookie") || "");
@@ -26,12 +25,12 @@ export async function getUserById(userId: number | undefined) {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: userId,
+        id: String(userId),
       },
     });
     return user;
   } catch (error) {
-    console.error("Error fetching user by ID:", error);
+    console.error("Error fetching user by ID:", userId);
     throw error;
   }
 }

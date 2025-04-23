@@ -1,3 +1,4 @@
+import "./tailwind.css";
 import {
   Links,
   Meta,
@@ -7,14 +8,13 @@ import {
   useActionData,
   useFetchers,
   useMatches,
-  // useNavigation,
   useRouteError,
 } from "@remix-run/react";
 import { Notification } from "./components/Notification";
 import { useEffect, useState } from "react";
-import "./tailwind.css";
+import { ActionData, LoaderData, Toast } from "./types";
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const navigation = useNavigation();
+  //-----------------------------------------------------------------
   const matches = useMatches();
   const actionData = useActionData<ActionData>();
   const fetchers = useFetchers();
@@ -71,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
-
+  //-----------------------------------------------------------------
   return (
     <html lang="en">
       <head>
@@ -82,7 +82,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        {/* Render all toasts */}
         {toasts.map((toast) => (
           <Notification
             key={toast.id}
@@ -91,7 +90,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
             onClose={() => removeToast(toast.id)}
           />
         ))}
-
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -111,17 +109,4 @@ export function ErrorBoundary() {
       <p>{error.data} ~</p>
     </div>
   );
-}
-export interface LoaderData {
-  toast?: Toast;
-}
-
-export interface ActionData {
-  toast?: Toast;
-}
-
-export interface Toast {
-  id: string;
-  message: string;
-  type: "success" | "error" | "info";
 }

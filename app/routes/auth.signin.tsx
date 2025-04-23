@@ -11,7 +11,7 @@ const JWT_EXPIRATION = "1h";
 export const loader: LoaderFunction = async ({ request }) => {
   const user = getUserFromSession(request);
   if (user) {
-    return redirect(`/${user?.role}/dashboard`);
+    return redirect(`/shop/dashboard`);
   }
   return {};
 };
@@ -45,11 +45,9 @@ export const action = async ({ request }: { request: Request }) => {
   }
 
   const token = jwt.sign(
-    { name: user.name, userId: user.id, email: user.email, role: user.role },
+    { name: user.name, userId: user.id, email: user.email },
     JWT_SECRET,
-    {
-      expiresIn: JWT_EXPIRATION,
-    }
+    { expiresIn: JWT_EXPIRATION }
   );
 
   const cookie = serialize("token", token, {
@@ -60,7 +58,7 @@ export const action = async ({ request }: { request: Request }) => {
     sameSite: "strict",
   });
 
-  return redirect(`/${user.role}/dashboard`, {
+  return redirect(`/shop/dashboard`, {
     headers: {
       "Set-Cookie": cookie,
     },
@@ -74,7 +72,7 @@ export default function Signin() {
     <div className="flex justify-center items-center h-screen">
       <div className="w-full md:w-96 mx-auto p-4 md:p-8 rounded bg-gray-100 border">
         <h1 className="text-start text-green-500 mb-4 text-2xl font-extrabold">
-          Jobifybd Sign In~
+          Shoppy Sign In~
         </h1>
         <div className="flex flex-col gap-4">
           <h1 className="capitalize text-lg">Sign In to your account 🔑</h1>

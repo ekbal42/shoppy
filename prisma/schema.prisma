@@ -1,94 +1,42 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())
+  phone     String   @unique 
+  name      String?
   email     String   @unique
   password  String
+  shops     Shop[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Shop {
+  id        String   @id @default(uuid())
   name      String
-  phone     String?
-  role      String
-  profile   Profile?
-  applications JobApplication[]
-  jobsPosted   Job[]
-  managedJobs     Job[]    @relation("ManagedJobs")
-
+  phone     String   @unique
+  address   String?
+  products  Product[]
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   String
+  createdAt DateTime @default(now())
 }
 
-
-model Profile {
-  id                   Int      @id @default(autoincrement())
-  bio                  String?
-  avatarUrl            String?
-  userId               Int      @unique
-  user                 User     @relation(fields: [userId], references: [id])
-
-  livingLocation       String?
-  preferredLocations   String? 
-  gender               String?
-
-  sscSchool           String?
-  sscGroup            String?
-  sscResult           Float?
-  sscMedium           String?
-
-  hscCollege          String?
-  hscGroup            String?
-  hscResult           Float?
-  hscMedium           String?
-
-  currentUniversity   String?
-  currentDepartment   String?
-  currentYearInUniversity Int?
-  lastSemesterResult  Float?
-}
-
-model Job {
-  id          Int      @id @default(autoincrement())
-  title       String
+model Product {
+  id          String   @id @default(uuid())
+  name        String
   description String?
-  location    String
-  salary      Float?
-  publisher     String
-  subjects String?
-  tutoringTime String?
-  daysInWeek String?
-  studentGender String
-  tutorGenderNeed String
-  tutorUniversityNeed String
-  tutorUniversityTypeNeed String
-  tutorDepartmentNeed String
-  views Int   @default(0)
+  price       Int
+  imageUrl    String?
+  shop        Shop     @relation(fields: [shopId], references: [id])
+  shopId      String
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  status      String   @default("active")
-  postedById  Int
-  postedBy    User     @relation(fields: [postedById], references: [id])
-  applications JobApplication[]
-  managedById Int?
-  managedBy   User?    @relation("ManagedJobs", fields: [managedById], references: [id])
-  managedAt   DateTime?
-}
-
-model JobApplication {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  jobId     Int
-  appliedAt DateTime @default(now())
-  stage     String   @default("APPLIED")
-
-  user      User @relation(fields: [userId], references: [id])
-  job       Job  @relation(fields: [jobId], references: [id])
-
-  @@unique([userId, jobId])
 }
