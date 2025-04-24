@@ -8,7 +8,7 @@ interface User {
   userId: string;
   email: string;
 }
-export function getUserFromSession(request: Request) {
+export async function getUserFromSession(request: Request) {
   const cookies = parse(request.headers.get("Cookie") || "");
   const token = cookies.token;
   if (!token) {
@@ -21,11 +21,35 @@ export function getUserFromSession(request: Request) {
   }
 }
 
-export async function getUserById(userId: number | undefined) {
+export async function getUserById(userId: string | undefined) {
   try {
     const user = await prisma.user.findUnique({
       where: {
         id: String(userId),
+      },
+      include: {
+        shops: {
+          include: {
+            products: {
+              include: {
+                orderItems: {
+                  include: {
+                    order: true,
+                  },
+                },
+              },
+            },
+            orders: {
+              include: {
+                items: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
     return user;

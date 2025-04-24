@@ -1,14 +1,14 @@
-import { json, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { getUserById, getUserFromSession } from "~/session.server";
 
 export function withAuth(loader: any) {
   return async ({ request }: { request: Request }) => {
-    const userSession = getUserFromSession(request);
+    const userSession = await getUserFromSession(request);
     if (!userSession) {
       return redirect("/auth/signin");
     }
-    const user = await getUserById(Number(userSession?.userId));
+    const user = await getUserById(userSession?.userId);
     const data = await loader({ request });
-    return json({ ...data, user });
+    return { ...data, user };
   };
 }

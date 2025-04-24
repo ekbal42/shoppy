@@ -10,9 +10,8 @@ datasource db {
 
 model User {
   id        String   @id @default(uuid())
-  phone     String   @unique 
+  phone     String   @unique
   name      String?
-  email     String   @unique
   password  String
   shops     Shop[]
   createdAt DateTime @default(now())
@@ -20,25 +19,47 @@ model User {
 }
 
 model Shop {
-  id        String   @id @default(uuid())
-  name      String
-  urlName   String   @unique
-  phone     String   @unique
+  id          String    @id @default(uuid())
+  name        String
+  handle      String    @unique
+  phone       String    @unique
   description String?
-  address   String?
-  products  Product[]
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String
-  createdAt DateTime @default(now())
+  address     String?
+  products    Product[]
+  orders      Order[]
+  owner       User      @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  createdAt   DateTime  @default(now())
 }
 
 model Product {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   description String?
   price       Int
   imageUrl    String?
-  shop        Shop     @relation(fields: [shopId], references: [id])
+  shop        Shop        @relation(fields: [shopId], references: [id])
   shopId      String
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[]
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  shop      Shop        @relation(fields: [shopId], references: [id])
+  shopId    String
+  total     Int
+  status    String
+  createdAt DateTime    @default(now())
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  price     Int
 }

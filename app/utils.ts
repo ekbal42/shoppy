@@ -39,3 +39,20 @@ export function formatTimeToAMPM(time: string | null): string {
   const formattedHours = parsedHours % 12 || 12;
   return `${formattedHours}:${minutes} ${ampm}`;
 }
+
+export function toPascalCaseAt(text: string): string {
+  if (!text) return "@";
+
+  const pascalCase = text
+    .split(/[\s\-_]+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join("");
+  return `@${pascalCase}`;
+}
+
+export const getOrigin = () => {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return "";
+};

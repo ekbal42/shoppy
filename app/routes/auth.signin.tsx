@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const JWT_EXPIRATION = "1h";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = getUserFromSession(request);
+  const user = await getUserFromSession(request);
   if (user) {
     return redirect(`/shop/dashboard`);
   }
@@ -18,37 +18,30 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
-  const emailOrPhone = formData.get("emailOrPhone");
+  const phone = formData.get("phone");
   const password = formData.get("password");
 
-  if (!emailOrPhone || !password) {
-    return { error: "Email/Phone and password are required." };
+  if (!phone || !password) {
+    return { error: "Phone and password are required." };
   }
-
-  const isEmail = emailOrPhone.includes("@");
 
   const user = await prisma.user.findFirst({
     where: {
-      OR: [
-        { email: isEmail ? emailOrPhone : undefined },
-        { phone: !isEmail ? emailOrPhone : undefined },
-      ],
+      OR: [{ phone }],
     },
   });
 
   if (!user) {
-    return { error: "No user found with this email or phone." };
+    return { error: "No user found with this phone." };
   }
 
   if (user.password !== password) {
     return { error: "Incorrect password." };
   }
 
-  const token = jwt.sign(
-    { name: user.name, userId: user.id, email: user.email },
-    JWT_SECRET,
-    { expiresIn: JWT_EXPIRATION }
-  );
+  const token = jwt.sign({ name: user.name, userId: user.id }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRATION,
+  });
 
   const cookie = serialize("token", token, {
     httpOnly: true,
@@ -81,12 +74,12 @@ export default function Signin() {
               </div>
             )}
             <fieldset className="fieldset">
-              <legend className="fieldset-legend">Email or Phone</legend>
+              <legend className="fieldset-legend">Shop Phone</legend>
               <input
                 type="text"
                 className="input w-full"
                 placeholder="Type here"
-                name="emailOrPhone"
+                name="phone"
                 required
               />
             </fieldset>

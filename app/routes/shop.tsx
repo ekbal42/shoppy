@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "@remix-run/react";
+import { Link, Outlet, useLoaderData, useLocation } from "@remix-run/react";
 import {
   Power,
   LayoutDashboard,
@@ -14,6 +14,7 @@ export const loader = withAuth(async () => {
 
 export default function Tutor() {
   const path = useLocation().pathname;
+  const { user } = useLoaderData<typeof loader>();
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="navbar bg-base-100 shadow-sm border-b">
@@ -28,7 +29,7 @@ export default function Tutor() {
                 className="text-primary"
                 strokeWidth={3}
               />
-              Shoppy
+              {user?.shops[0]?.name || "Shoppy"}
             </Link>
 
             <form method="post" action="/auth/logout">
@@ -58,24 +59,6 @@ export default function Tutor() {
                 Dashboard
               </Link>
             </li>
-             <li>
-              <Link
-                to="#"
-                className={path.includes("/shop/add") ? "menu-active" : ""}
-              >
-                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                Add Product
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="#"
-                className={path.includes("/shop/products") ? "menu-active" : ""}
-              >
-                <List className="flex-shrink-0 h-5 w-5 mr-3" />
-                Products
-              </Link>
-            </li> 
             <li>
               <Link
                 to="#"
@@ -93,7 +76,8 @@ export default function Tutor() {
                 <List className="flex-shrink-0 h-5 w-5 mr-3" />
                 Products
               </Link>
-            </li> <li>
+            </li>
+            <li>
               <Link
                 to="#"
                 className={path.includes("/shop/add") ? "menu-active" : ""}
@@ -110,7 +94,8 @@ export default function Tutor() {
                 <List className="flex-shrink-0 h-5 w-5 mr-3" />
                 Products
               </Link>
-            </li> <li>
+            </li>{" "}
+            <li>
               <Link
                 to="#"
                 className={path.includes("/shop/add") ? "menu-active" : ""}
@@ -127,7 +112,25 @@ export default function Tutor() {
                 <List className="flex-shrink-0 h-5 w-5 mr-3" />
                 Products
               </Link>
-            </li> 
+            </li>{" "}
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/add") ? "menu-active" : ""}
+              >
+                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
+                Add Product
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/products") ? "menu-active" : ""}
+              >
+                <List className="flex-shrink-0 h-5 w-5 mr-3" />
+                Products
+              </Link>
+            </li>
           </ul>
 
           <main className="flex-1 border-s">

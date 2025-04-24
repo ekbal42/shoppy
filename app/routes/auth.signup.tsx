@@ -2,9 +2,11 @@ import { LoaderFunction, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { prisma } from "../db.server";
 import { getUserFromSession } from "~/session.server";
+import { toPascalCaseAt } from "~/utils";
+import { useState } from "react";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = getUserFromSession(request);
+  const user = await getUserFromSession(request);
   if (user) {
     return redirect(`/shop/dashboard`);
   }
@@ -14,42 +16,56 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const action = async ({ request }: { request: Request }) => {
   const formData = new URLSearchParams(await request.text());
   const name = formData.get("name");
-  const email = formData.get("email");
+  const shopName = formData.get("shopName");
   const password = formData.get("password");
   const phone = formData.get("phone");
 
-  if (!name || !email || !password || !phone) {
+  if (!name || !shopName || !password || !phone) {
     return { error: "All fields are required." };
   }
 
+  const shopHandle = toPascalCaseAt(shopName);
+
   const existingUser = await prisma.user.findFirst({
     where: {
-      OR: [{ email }, { phone }],
+      OR: [{ phone }],
     },
   });
 
   if (existingUser) {
-    if (existingUser.email === email) {
-      return { error: "User already exists with this email." };
-    }
     if (existingUser.phone === phone) {
       return { error: "User already exists with this phone number." };
     }
+  }
+
+  const existingShop = await prisma.shop.findFirst({
+    where: {
+      handle: shopHandle,
+    },
+  });
+
+  if (existingShop) {
+    return { error: "A shop with this name already exists." };
   }
 
   try {
     await prisma.user.create({
       data: {
         name,
-        email,
         password,
         phone,
+        shops: {
+          create: {
+            name: shopName,
+            handle: shopHandle,
+            phone: phone,
+          },
+        },
       },
     });
 
     return redirect("/auth/signin");
   } catch (error) {
-    console.error(error);
     return {
       error: "Something went wrong while creating the user.",
     };
@@ -57,6 +73,7 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 export default function Signup() {
+  const [shopName, setShopName] = useState("");
   const actionData = useActionData<{ error?: string }>();
   const navigation = useNavigation();
 
@@ -72,7 +89,6 @@ export default function Signup() {
                 <span>{actionData.error}</span>
               </div>
             )}
-
             <fieldset className="fieldset">
               <legend className="fieldset-legend">What is your name?</legend>
               <input
@@ -84,6 +100,29 @@ export default function Signup() {
               />
             </fieldset>
             <fieldset className="fieldset">
+              <legend className="fieldset-legend">
+                What is your shops name?
+              </legend>
+              <input
+                spellCheck="false"
+                type="text"
+                className="input w-full"
+                placeholder="Type here"
+                name="shopName"
+                value={shopName}
+                onChange={(e) => setShopName(e.target.value)}
+                required
+              />
+              {shopName && (
+                <p className="label text-sm mt-1">
+                  Shop handle will be :
+                  <span className="font-mono text-blue-500 ms-0.5">
+                    {toPascalCaseAt(shopName)}
+                  </span>
+                </p>
+              )}
+            </fieldset>
+            <fieldset className="fieldset">
               <legend className="fieldset-legend">Enter your phone.</legend>
               <input
                 type="tel"
@@ -93,16 +132,7 @@ export default function Signup() {
                 required
               />
             </fieldset>
-            <fieldset className="fieldset">
-              <legend className="fieldset-legend">Enter your email.</legend>
-              <input
-                type="email"
-                className="input w-full"
-                placeholder="Type here"
-                name="email"
-                required
-              />
-            </fieldset>
+
             <fieldset className="fieldset">
               <legend className="fieldset-legend">Password you prefer.</legend>
               <input
