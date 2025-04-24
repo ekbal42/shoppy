@@ -5,6 +5,11 @@ import {
   PlusSquare,
   List,
   ShoppingCart,
+  Headset,
+  Settings,
+  Info,
+  Palette,
+  ClockArrowUp,
 } from "lucide-react";
 import { withAuth } from "~/middlewares/withAuth";
 
@@ -22,13 +27,9 @@ export default function Tutor() {
           <div className="flex justify-between h-16 items-center">
             <Link
               to="/"
-              className="text-2xl font-bold flex gap-2 uppercase text-primary"
+              className="text-2xl font-bold flex gap-2 uppercase text-nutral"
             >
-              <ShoppingCart
-                size={30}
-                className="text-primary"
-                strokeWidth={3}
-              />
+              <ShoppingCart size={30} className="text-nutral" strokeWidth={3} />
               {user?.shops[0]?.name || "Shoppy"}
             </Link>
 
@@ -61,16 +62,7 @@ export default function Tutor() {
             </li>
             <li>
               <Link
-                to="#"
-                className={path.includes("/shop/add") ? "menu-active" : ""}
-              >
-                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                Add Product
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="#"
+                to="/shop/products"
                 className={path.includes("/shop/products") ? "menu-active" : ""}
               >
                 <List className="flex-shrink-0 h-5 w-5 mr-3" />
@@ -80,55 +72,55 @@ export default function Tutor() {
             <li>
               <Link
                 to="#"
-                className={path.includes("/shop/add") ? "menu-active" : ""}
+                className={path.includes("/shop/orders") ? "menu-active" : ""}
               >
-                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                Add Product
+                <ClockArrowUp className="flex-shrink-0 h-5 w-5 mr-3" />
+                Orders
               </Link>
             </li>
             <li>
               <Link
                 to="#"
-                className={path.includes("/shop/products") ? "menu-active" : ""}
+                className={path.includes("/shop/details") ? "menu-active" : ""}
               >
-                <List className="flex-shrink-0 h-5 w-5 mr-3" />
-                Products
+                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
+                Shop Details
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="#"
+                className={path.includes("/shop/theme") ? "menu-active" : ""}
+              >
+                <Palette className="flex-shrink-0 h-5 w-5 mr-3" />
+                Theme
               </Link>
             </li>{" "}
             <li>
               <Link
                 to="#"
-                className={path.includes("/shop/add") ? "menu-active" : ""}
+                className={path.includes("/shop/faq") ? "menu-active" : ""}
               >
-                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                Add Product
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="#"
-                className={path.includes("/shop/products") ? "menu-active" : ""}
-              >
-                <List className="flex-shrink-0 h-5 w-5 mr-3" />
-                Products
+                <Info className="flex-shrink-0 h-5 w-5 mr-3" />
+                FAQ
               </Link>
             </li>{" "}
             <li>
               <Link
                 to="#"
-                className={path.includes("/shop/add") ? "menu-active" : ""}
+                className={path.includes("/shop/settings") ? "menu-active" : ""}
               >
-                <PlusSquare className="flex-shrink-0 h-5 w-5 mr-3" />
-                Add Product
+                <Settings className="flex-shrink-0 h-5 w-5 mr-3" />
+                Settings
               </Link>
             </li>
             <li>
               <Link
                 to="#"
-                className={path.includes("/shop/products") ? "menu-active" : ""}
+                className={path.includes("/shop/help") ? "menu-active" : ""}
               >
-                <List className="flex-shrink-0 h-5 w-5 mr-3" />
-                Products
+                <Headset className="flex-shrink-0 h-5 w-5 mr-3" />
+                Help Center
               </Link>
             </li>
           </ul>
