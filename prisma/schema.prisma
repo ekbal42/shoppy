@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -52,6 +51,9 @@ model Order {
   status    String
   createdAt DateTime    @default(now())
   items     OrderItem[]
+  customerName  String
+  customerPhone String
+  customerAddress String
 }
 
 model OrderItem {

@@ -98,7 +98,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <Orders />
+    </>
+  );
 }
 
 export function ErrorBoundary() {
@@ -110,3 +115,43 @@ export function ErrorBoundary() {
     </div>
   );
 }
+
+const Orders = () => {
+  const [orders, setOrders] = useState<any[]>([]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedOrders = localStorage.getItem("orders");
+      setOrders(storedOrders ? JSON.parse(storedOrders) : []);
+    }
+  }, []);
+  return (
+    <>
+      {orders.length > 0 && (
+        <div className="fixed bottom-0 right-0 p-4">
+          <div className="bg-white shadow-lg rounded-lg p-4 max-w-sm w-full">
+            <h2 className="text-lg font-semibold mb-2">Recent Orders</h2>
+            <ul className="list-disc pl-5">
+              {orders.map((order: any, index: number) => (
+                <li key={index} className="mb-3">
+                  Order ID: {order.orderId}
+                  <br />
+                  OrderDate : {order.date}
+                  <br />
+                  Shop : {order.shop}
+                  <br />
+                  Tracking UrL :
+                  <a
+                    className="underline text-blue-500 ms-1"
+                    href={order.trackingUrl}
+                  >
+                    Track This Order
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};

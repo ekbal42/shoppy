@@ -25,4 +25,13 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  server: {
+    watch: {
+      ignored: [
+        '**/prisma/dev.db', // Ignore SQLite file changes
+        '**/prisma/dev.db-journal' // Also ignore the journal file
+      ]
+    }
+  }
+
 });

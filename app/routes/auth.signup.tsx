@@ -83,7 +83,7 @@ export default function Signup() {
         <h2 className="card-title text-2xl mb-1">Register to Shoppy</h2>
         <p>Create an account to start shopping with us.</p>
         <div className="flex flex-col gap-4 mt-4">
-          <Form method="post" className="flex flex-col gap-4">
+          <Form method="post" navigate={false} className="flex flex-col gap-4">
             {actionData?.error && (
               <div role="alert" className="alert alert-error alert-soft">
                 <span>{actionData.error}</span>
