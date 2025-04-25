@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
-import { useLoaderData, json, redirect, Form } from "@remix-run/react";
+import { useLoaderData, redirect, Form } from "@remix-run/react";
 import { prisma } from "~/db.server";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response("Shop not found", { status: 404 });
   }
 
-  return json({ shop });
+  return { shop };
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -31,7 +31,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   const quantity = parseInt(formData.get("quantity") as string);
 
   if (!customerName || !customerPhone || !productId || isNaN(quantity)) {
-    return json({ error: "Missing required fields" }, { status: 400 });
+    return { error: "Missing required fields" };
   }
 
   try {
@@ -41,14 +41,14 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
 
     if (!product) {
-      return json({ error: "Product not found" }, { status: 404 });
+      return { error: "Product not found" };
     }
 
     const order = await prisma.order.create({
       data: {
         shopId: product.shopId,
         total: product.price * quantity,
-        status: "PENDING",
+        status: "pending",
         items: {
           create: {
             productId,
@@ -65,7 +65,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return redirect(`/${handle}/thanks?orderId=${order.id}`);
   } catch (error) {
     console.error("Order creation failed:", error);
-    return json({ error: "Failed to create order" }, { status: 500 });
+    return { error: "Failed to create order" };
   }
 }
 
@@ -76,7 +76,7 @@ export default function ShopPage() {
   return (
     <div className="p-4 max-w-6xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{shop.name}</h1>
+        <h1 className="text-4xl font-bold mb-2 uppercase">{shop.name}</h1>
         <p className="text-lg opacity-80 mb-4">{shop.description}</p>
         {shop.address && (
           <div className="badge badge-lg badge-outline">
@@ -144,7 +144,7 @@ export default function ShopPage() {
               <p>{product.description}</p>
               <div className="card-actions justify-between items-center mt-4">
                 <span className="text-2xl font-bold">
-                  ${(product.price / 100).toFixed(2)}
+                  BDT {(product.price / 100).toFixed(2)}
                 </span>
                 <button
                   onClick={() => {
@@ -234,6 +234,7 @@ export default function ShopPage() {
                       Delivery Address
                     </legend>
                     <textarea
+                      spellCheck="false"
                       className="textarea w-full"
                       placeholder="My awesome page"
                       name="customerAddress"

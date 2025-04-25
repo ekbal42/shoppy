@@ -24,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "cookie": "^1.0.1",
     "daisyui": "^5.0.28",
+    "dayjs": "^1.11.13",
     "isbot": "^4.1.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.456.0",

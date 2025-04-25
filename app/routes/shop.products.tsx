@@ -124,7 +124,7 @@ export default function Products() {
     return (
       <div className="p-8">
         <div className="alert alert-warning">
-          You don't have any shops yet. Please create a shop first.
+          You dont have any shops yet. Please create a shop first.
         </div>
       </div>
     );
@@ -143,8 +143,7 @@ export default function Products() {
 
   const handleDeleteClick = (product: any) => {
     setProductToDelete(product);
-    // @ts-ignore - DaisyUI modal method
-    document.getElementById("delete_modal").showModal();
+    (document.getElementById("delete_modal") as HTMLDialogElement)?.close();
   };
 
   return (
@@ -250,8 +249,8 @@ export default function Products() {
         <div className="modal-box">
           <h3 className="font-bold text-lg">Confirm Delete</h3>
           <p className="py-4">
-            Are you sure you want to delete "{productToDelete?.name}"? This
-            action cannot be undone.
+            Are you sure you want to delete {productToDelete?.name}? This action
+            cannot be undone.
           </p>
           <div className="modal-action">
             <Form method="post">
@@ -266,8 +265,9 @@ export default function Products() {
                 type="button"
                 className="btn btn-ghost"
                 onClick={() => {
-                  // @ts-ignore - DaisyUI modal method
-                  document.getElementById("delete_modal").close();
+                  (
+                    document.getElementById("delete_modal") as HTMLDialogElement
+                  )?.close();
                   setProductToDelete(null);
                 }}
               >
@@ -334,7 +334,7 @@ export default function Products() {
                   <div className="overflow-x-auto">
                     <table className="table table-zebra px-0 border border-gray-100 w-full">
                       <thead>
-                        <tr>
+                        <tr className="bg-gray-100">
                           <th>Name</th>
                           <th>Price</th>
                           <th>Added On</th>
@@ -364,15 +364,11 @@ export default function Products() {
                                   <div className="font-bold capitalize">
                                     {product.name}
                                   </div>
-                                  {product.description && (
-                                    <div className="text-sm opacity-50 line-clamp-1">
-                                      {product.description.slice(0, 50)}
-                                    </div>
-                                  )}
+                                  <p>BDT {product.price} </p>
                                 </div>
                               </div>
                             </td>
-                            <td>BDT {product.price / 100}</td>
+                            <td>BDT {product.price}</td>
                             <td>
                               {new Date(product.createdAt).toLocaleDateString()}
                             </td>

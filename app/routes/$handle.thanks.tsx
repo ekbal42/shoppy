@@ -3,18 +3,20 @@ import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { ExternalLink, Copy, Check } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const { handle } = params;
-  return { handle };
+  const recuestURL = new URL(request.url);
+  const requestOrigin = recuestURL.origin;
+
+  return { handle, requestOrigin };
 }
 
 export default function Thanks() {
-  const { handle } = useLoaderData<typeof loader>();
+  const { handle, requestOrigin } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
   const orderId = searchParams.get("orderId");
   const [copied, setCopied] = useState(false);
-  const fullUrl = "http://localhost:5173";
-  const trackingUrl = `${fullUrl}/${handle}/track/${orderId}`;
+  const trackingUrl = `${requestOrigin}/${handle}/track/${orderId}`;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(trackingUrl);
@@ -36,7 +38,7 @@ export default function Thanks() {
       });
       localStorage.setItem("orders", JSON.stringify(orders));
     }
-  }, []);
+  }, [orderId, trackingUrl, handle]);
 
   if (!orderId) {
     return (
@@ -54,17 +56,17 @@ export default function Thanks() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-gray-100 to-white p-6 text-center">
       <h1 className="text-3xl font-bold mb-2 text-gray-800">
-        🎉 Thanks for your order!
+        🎉 Thanks for your order! 🎉
       </h1>
       <p className="text-lg text-gray-600 mb-4">
-        Here's your order tracking link. Please copy and save it for future use.
+        Heres your order tracking link. Please copy and save it for future use.
       </p>
 
       <div className="flex items-center bg-white border border-gray-300 rounded-md px-4 py-2 shadow-sm w-full max-w-md justify-between mb-3">
         <span className="text-sm text-gray-700 truncate">{trackingUrl}</span>
         <button
           onClick={handleCopy}
-          className="text-blue-500 hover:text-blue-700 transition-colors ml-2"
+          className="text-blue-500 hover:text-blue-700 transition-colors ml-2 cursor-pointer"
           title="Copy to clipboard"
         >
           {copied ? (
