@@ -4,6 +4,7 @@ import { useLoaderData, Form, useNavigation } from "@remix-run/react";
 import { prisma } from "~/db.server";
 import { useState, useEffect } from "react";
 import { CirclePlusIcon, FileSymlink, Pencil, Trash2 } from "lucide-react";
+import dayjs from "dayjs";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUserFromSession(request);
@@ -143,7 +144,7 @@ export default function Products() {
 
   const handleDeleteClick = (product: any) => {
     setProductToDelete(product);
-    (document.getElementById("delete_modal") as HTMLDialogElement)?.close();
+    (document.getElementById("delete_modal") as HTMLDialogElement)?.showModal();
   };
 
   return (
@@ -273,7 +274,15 @@ export default function Products() {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn btn-error">
+              <button
+                type="submit"
+                className="btn btn-error"
+                onClick={() =>
+                  (
+                    document.getElementById("delete_modal") as HTMLDialogElement
+                  )?.close()
+                }
+              >
                 Delete
               </button>
             </Form>
@@ -370,7 +379,7 @@ export default function Products() {
                             </td>
                             <td>BDT {product.price}</td>
                             <td>
-                              {new Date(product.createdAt).toLocaleDateString()}
+                              {dayjs(product.createdAt).format("DD/MM/YYYY")}
                             </td>
                             <td>
                               <div className="flex gap-1">
